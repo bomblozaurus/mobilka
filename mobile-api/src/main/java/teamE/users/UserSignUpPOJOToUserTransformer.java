@@ -1,13 +1,14 @@
 package teamE.users;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import teamE.common.Transformer;
 
-@Service
-public class UserPOJOToUserTransformer implements Transformer<UserPOJO, User> {
+@Component
+public class UserSignUpPOJOToUserTransformer implements Transformer<UserSignUpPOJO, User> {
     @Override
-    public User transform(UserPOJO pojo) {
-        User user = User.builder()
+    public User transform(UserSignUpPOJO pojo) {
+
+        return User.builder()
                 .email(pojo.getEmail())
                 .firstName(pojo.getFirstName())
                 .lastName(pojo.getLastName())
@@ -16,7 +17,5 @@ public class UserPOJOToUserTransformer implements Transformer<UserPOJO, User> {
                 .indexNumber(pojo.getIndexNumber())
                 .studentHouse(pojo.getStudentHouse())
                 .build();
-
-        return user;
     }
 }

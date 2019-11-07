@@ -6,7 +6,7 @@ import teamE.users.StudentHouse;
 
 @Data
 @NoArgsConstructor
-public class UserPOJO {
+public class UserSignUpPOJO {
     private String password;
     private String email;
     private String firstName;
