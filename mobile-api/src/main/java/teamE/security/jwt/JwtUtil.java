@@ -3,9 +3,12 @@ package teamE.security.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import teamE.users.UserTokenInformation;
 
 import java.io.Serializable;
 import java.security.KeyFactory;
@@ -15,17 +18,17 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil implements Serializable {
     private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.RS512;
     private static final long JWT_TOKEN_VALIDITY = 30 * 24 * 60 * 60;
     private static final String DEVICE_KEY = "device";
+    private static final String ROLE_KEY = "role";
+    private static final String NAME_KEY = "name";
     private static final String ENCRYPTION = "RSA";
 
     private PrivateKey privateKey;
@@ -59,7 +62,11 @@ public class JwtUtil implements Serializable {
     }
 
     String getDeviceInformationFromToken(String token) {
-        return getCustomClaimFromToken(token, DEVICE_KEY, String.class);
+        return getStringClaimFromToken(token, DEVICE_KEY);
+    }
+
+    String getUserRolesFromToken(String token) {
+        return getStringClaimFromToken(token, ROLE_KEY);
     }
 
     boolean isTokenValid(String token, UserDetails userDetails, String deviceInfo) {
@@ -68,6 +75,14 @@ public class JwtUtil implements Serializable {
         boolean doesEmailMatch = doesEmailMatch(getEmailFromToken(token), userDetails.getUsername());
 
         return isTokenNotExpired && doesDeviceInfoMatch && doesEmailMatch;
+    }
+
+    boolean doUserRolesMatch(String token, Collection<SimpleGrantedAuthority> authorities) {
+        String roles = getUserRolesFromToken(token);
+        Collection<String> authStrings = authorities.stream().map(Objects::toString).collect(Collectors.toList());
+        String authString = StringUtils.join(authStrings, ',');
+
+        return authString.equals(roles);
     }
 
     private boolean doesEmailMatch(String emailFromToken, String email) {
@@ -82,21 +97,28 @@ public class JwtUtil implements Serializable {
         return expiration.after(new Date());
     }
 
-    public String generateToken(UserDetails userDetails, String deviceInformation) {
+    public String generateToken(UserTokenInformation userTokenInformation, String deviceInformation) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(DEVICE_KEY, deviceInformation);
+        claims.put(NAME_KEY, userTokenInformation.getName());
+        claims.put(ROLE_KEY, userTokenInformation.getRoles());
 
         Date now = new Date();
 
         return Jwts.builder().setClaims(claims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userTokenInformation.getEmail())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(privateKey, SIGNATURE_ALGORITHM).compact();
     }
 
+
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token).getBody();
+    }
+
+    private String getStringClaimFromToken(String token, String key) {
+        return getCustomClaimFromToken(token, key, String.class);
     }
 
     private <T> T getClaimFromToken(String token, Function<Claims, T> getter) {

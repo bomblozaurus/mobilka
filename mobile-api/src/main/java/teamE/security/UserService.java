@@ -1,13 +1,9 @@
 package teamE.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import teamE.users.User;
-import teamE.users.UserRepository;
-import teamE.users.UserSignUpPOJO;
-import teamE.users.UserSignUpPOJOToUserTransformer;
+import teamE.users.*;
 import teamE.users.exceptions.EmailAlreadyUsedException;
 import teamE.users.exceptions.UserException;
 
@@ -35,6 +31,12 @@ public class UserService implements IUserService {
         User user = transformer.transform(account);
 
         return userRepository.save(user);
+    }
+
+    public UserTokenInformation getUserDetailsForToken(String email) {
+        User user = userRepository.getByEmail(email);
+        UserToUserTokenInformationTransformer transformer = new UserToUserTokenInformationTransformer();
+        return transformer.transform(user);
     }
 
 

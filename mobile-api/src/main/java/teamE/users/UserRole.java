@@ -19,6 +19,9 @@ public class UserRole {
     @Enumerated(EnumType.STRING)
     private UserRoleType type;
 
-
+    @Override
+    public String toString() {
+        return type.toString();
+    }
 }
 

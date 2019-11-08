@@ -7,16 +7,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import teamE.security.UserService;
-import teamE.security.configuration.CustomUserDetailsService;
 import teamE.security.jwt.JwtResponse;
 import teamE.security.jwt.JwtUtil;
 import teamE.users.UserSignInPOJO;
 import teamE.users.UserSignUpPOJO;
+import teamE.users.UserTokenInformation;
+import teamE.users.exceptions.BadUserCredentialsException;
+import teamE.users.exceptions.UserDisabledException;
 import teamE.users.exceptions.UserException;
 
 @RestController
@@ -24,14 +24,12 @@ import teamE.users.exceptions.UserException;
 public class AuthenticationController {
 
     private AuthenticationManager authenticationManager;
-    private UserDetailsService userDetailsService;
     private UserService userService;
     private JwtUtil jwtUtil;
 
     @Autowired
-    public AuthenticationController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, UserService userService, JwtUtil jwtUtil) {
+    public AuthenticationController(AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
         this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
@@ -47,12 +45,12 @@ public class AuthenticationController {
     public ResponseEntity logIn(@RequestBody UserSignInPOJO authenticationDetails, @RequestHeader("Device-info") String device) throws Exception {
         try {
             authenticate(authenticationDetails.getEmail(), authenticationDetails.getPassword());
-        } catch (Exception e) {
+        } catch (UserException e) {
             return new ResponseEntity(e, HttpStatus.UNAUTHORIZED);
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationDetails.getEmail());
-        String token = jwtUtil.generateToken(userDetails, device);
+        UserTokenInformation userTokenInformation = userService.getUserDetailsForToken(authenticationDetails.getEmail());
+        String token = jwtUtil.generateToken(userTokenInformation, device);
 
         return ResponseEntity.ok(new JwtResponse(token));
     }
@@ -64,9 +62,9 @@ public class AuthenticationController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (DisabledException disabled) {
-            throw new Exception("User disabled", disabled);
+            throw new UserDisabledException("User disabled");
         } catch (BadCredentialsException badCredentials) {
-            throw new Exception("Invalid credentials", badCredentials);
+            throw new BadUserCredentialsException("Invalid credentials");
         }
     }
 
@@ -74,7 +72,7 @@ public class AuthenticationController {
         try {
             userService.registerNewUserAccount(accountDetails);
             return true;
-        } catch (UserException ue){
+        } catch (UserException ue) {
             return false;
         }
     }
