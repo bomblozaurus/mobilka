@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
-class HomePage extends StatefulWidget{
+class HomePage extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return null;
+  Widget build(BuildContext context) {
+    return Container();
   }
-
 }
