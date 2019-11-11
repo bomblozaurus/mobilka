@@ -1,5 +1,8 @@
 package com.teamE.users;
 
+import lombok.Data;
+
+
 public enum StudentHouse {
     DS1(1),
     DS2(2),
@@ -15,5 +18,9 @@ public enum StudentHouse {
 
     StudentHouse(int id) {
         this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }
