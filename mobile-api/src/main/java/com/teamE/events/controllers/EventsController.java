@@ -3,7 +3,9 @@ package com.teamE.events.controllers;
 
 import com.teamE.events.data.entity.Address;
 import com.teamE.events.data.entity.Event;
+import com.teamE.events.data.entity.Scope;
 import com.teamE.events.manager.EventManager;
+import com.teamE.users.StudentHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,11 @@ public class EventsController {
     public Optional<Event> getById(@RequestParam Long index) {
         return eventManager.findById(index);
     }
+
+/*    @GetMapping
+    public Optional<Event> getByScope(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
+
+    }*/
 
     @GetMapping("/address")
     public Address getAddress() {

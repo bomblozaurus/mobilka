@@ -1,6 +1,7 @@
 package com.teamE.events.data.entity;
 
 
+import com.teamE.users.StudentHouse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class Event {
     @Lob
     private byte[] image;
     private Scope scope;
+    private StudentHouse studentHouse;
 
 //   public Event(String name, Date date, Address address, String description, byte[] image, Scope scope) {
 //        this.name = name;
