@@ -16,4 +16,8 @@ public enum StudentHouse {
     StudentHouse(int id) {
         this.id = id;
     }
+
+    public int getId() {
+        return id;
+    }
 }

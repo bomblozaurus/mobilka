@@ -1,12 +1,15 @@
 package com.teamE.events.controllers;
 
 
+import com.teamE.events.converters.ScopeConverter;
+import com.teamE.events.converters.StudentHouseConverter;
 import com.teamE.events.data.entity.Address;
 import com.teamE.events.data.entity.Event;
 import com.teamE.events.data.entity.Scope;
 import com.teamE.events.manager.EventManager;
 import com.teamE.users.StudentHouse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -32,10 +35,22 @@ public class EventsController {
         return eventManager.findById(index);
     }
 
-/*    @GetMapping
-    public Optional<Event> getByScope(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
-
-    }*/
+   @GetMapping("/scope")
+    public Iterable<Event> getByScope(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
+        if (scope.equals(Scope.DORMITORY)) {
+            return eventManager.findByScopeAndStudentHouse(scope, studentHouse);
+        } else {
+            return eventManager.findByScope(scope);
+        }
+    }
+    @GetMapping("/scopeOrderDate")
+    public Iterable<Event> getByScopeOrderByDateDesc(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
+        if (scope.equals(Scope.DORMITORY)) {
+            return eventManager.findByScopeAndStudentHouseOrderByDateDesc(scope, studentHouse);
+        } else {
+            return eventManager.findByScopeOrderByDateDesc(scope);
+        }
+    }
 
     @GetMapping("/address")
     public Address getAddress() {
@@ -55,5 +70,11 @@ public class EventsController {
     @DeleteMapping
     public void deleteEvent(@RequestParam Long index) {
         eventManager.deleteById(index);
+    }
+
+    @InitBinder
+    public void initBinder(final WebDataBinder webdataBinder) {
+        webdataBinder.registerCustomEditor(Scope.class, new ScopeConverter());
+        webdataBinder.registerCustomEditor(StudentHouse.class, new StudentHouseConverter());
     }
 }
