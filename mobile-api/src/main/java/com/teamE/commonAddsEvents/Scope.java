@@ -1,6 +1,5 @@
-package com.teamE.events.data.entity;
+package com.teamE.commonAddsEvents;
 
-import java.util.Arrays;
 
 public enum Scope  {
     DORMITORY("dormitory"),

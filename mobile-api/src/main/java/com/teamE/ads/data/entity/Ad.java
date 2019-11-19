@@ -1,5 +1,4 @@
-package com.teamE.events.data.entity;
-
+package com.teamE.ads.data.entity;
 
 import com.teamE.commonAddsEvents.Address;
 import com.teamE.commonAddsEvents.Scope;
@@ -8,17 +7,17 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.math.BigDecimal;
 
 @Entity
 @Data
 @RequiredArgsConstructor
-public class Event {
+public class Ad {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
     private String name;
-    private Date date;
+    BigDecimal price;
     @OneToOne(targetEntity= Address.class)
     private Address address;
     private String description;
@@ -26,17 +25,4 @@ public class Event {
     private byte[] image;
     private Scope scope;
     private StudentHouse studentHouse;
-
-//   public Event(String name, Date date, Address address, String description, byte[] image, Scope scope) {
-//        this.name = name;
-//        this.date = date;
-//        this.address = address;
-//        this.description = description;
-//        this.image = image;
-//        this.scope = scope;
-//    }
-
-   /* public Event(Address address) {
-        this.address = address;
-    }*/
 }

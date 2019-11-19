@@ -1,22 +1,15 @@
 package com.teamE.events.manager;
 
 
-import com.teamE.events.converters.ScopeConverter;
-import com.teamE.events.converters.StudentHouseConverter;
-import com.teamE.events.data.AddressRepo;
+import com.teamE.commonAddsEvents.AddressRepo;
 import com.teamE.events.data.EventsRepo;
-import com.teamE.events.data.entity.Address;
+import com.teamE.commonAddsEvents.Address;
 import com.teamE.events.data.entity.Event;
-import com.teamE.events.data.entity.Scope;
+import com.teamE.commonAddsEvents.Scope;
 import com.teamE.users.StudentHouse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 
-import java.util.Date;
 import java.util.Optional;
 
 @Service

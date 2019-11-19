@@ -1,7 +1,7 @@
 package com.teamE.events.data;
 
 import com.teamE.events.data.entity.Event;
-import com.teamE.events.data.entity.Scope;
+import com.teamE.commonAddsEvents.Scope;
 import com.teamE.users.StudentHouse;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

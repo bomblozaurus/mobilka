@@ -1,6 +1,6 @@
-package com.teamE.events.data;
+package com.teamE.commonAddsEvents;
 
-import com.teamE.events.data.entity.Address;
+import com.teamE.commonAddsEvents.Address;
 import org.springframework.data.repository.CrudRepository;
 
 

@@ -1,11 +1,11 @@
 package com.teamE.events.controllers;
 
 
-import com.teamE.events.converters.ScopeConverter;
-import com.teamE.events.converters.StudentHouseConverter;
-import com.teamE.events.data.entity.Address;
+import com.teamE.commonAddsEvents.converters.ScopeConverter;
+import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
+import com.teamE.commonAddsEvents.Address;
 import com.teamE.events.data.entity.Event;
-import com.teamE.events.data.entity.Scope;
+import com.teamE.commonAddsEvents.Scope;
 import com.teamE.events.manager.EventManager;
 import com.teamE.users.StudentHouse;
 import org.springframework.beans.factory.annotation.Autowired;
