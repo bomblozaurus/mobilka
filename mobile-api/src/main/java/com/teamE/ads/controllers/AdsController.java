@@ -40,7 +40,7 @@ public class AdsController {
             return adManager.findByScope(scope);
         }
     }
-    @GetMapping("/scopeOrderDate")
+    @GetMapping("/scopeOrderPriceDesc")
     public Iterable<Ad> getByScopeOrderByDateDesc(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
         if (scope.equals(Scope.DORMITORY)) {
             return adManager.findByScopeAndStudentHouseOrderByPriceDesc(scope, studentHouse);
