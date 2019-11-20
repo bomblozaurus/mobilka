@@ -49,7 +49,7 @@ public class JwtUtil implements Serializable {
     }
 
 
-    String getEmailFromToken(String token) {
+    public String getEmailFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
