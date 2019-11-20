@@ -1,15 +1,10 @@
 package com.teamE.rooms;
-
-
-import com.teamE.security.UserService;
-import com.teamE.security.jwt.JwtUtil;
-import com.teamE.users.StudentHouse;
 import com.teamE.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
 import java.util.List;
 @RequestMapping("rooms")
 @RestController
@@ -36,21 +31,14 @@ public class RoomRestController {
     }
     @GetMapping("getAllForUser")
     public List<Room> getAllForUser(){
-
         return roomRepository.getAllByDsNumber(userRepository.getByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).getStudentHouse().getId());
     }
 
-    @GetMapping("pies")
-    public String pies() {
-        return "pies";
-    }
 
-    @PostMapping("postRoom")
+
+    @PostMapping("addRoom")
     public <S extends Room> S save(@RequestBody S s) {
-        int h = roomRepository.countAllByDsNumber(s.getDsNumber());
-
-        s.setId((s.getDsNumber() * 100 )+ h + 1);
-
+        s.setId((s.getDsNumber() * 100 )+ roomRepository.countAllByDsNumber(s.getDsNumber()) + 1);
         return roomRepository.save(s);
     }
 }

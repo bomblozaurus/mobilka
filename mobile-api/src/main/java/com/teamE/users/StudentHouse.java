@@ -1,8 +1,5 @@
 package com.teamE.users;
 
-import lombok.Data;
-
-
 public enum StudentHouse {
     DS1(1),
     DS2(2),
