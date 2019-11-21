@@ -33,7 +33,7 @@ public class EventManager {
     }
 
     public Event save(Event event) {
-        this.save(event.getAddress());
+ /*       this.save(event.getAddress());*/
         return eventsRepo.save(event);
     }
 

@@ -19,8 +19,11 @@ public class Event {
     private Long id;
     private String name;
     private Date date;
-    @OneToOne(targetEntity= Address.class)
-    private Address address;
+    private String street;
+    private int houseNumber;
+    private int apartmentNumber;
+    private String city;
+    private String zip;
     private String description;
     @Lob
     private byte[] image;
