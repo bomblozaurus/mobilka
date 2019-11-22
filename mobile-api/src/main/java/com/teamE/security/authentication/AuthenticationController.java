@@ -55,6 +55,11 @@ public class AuthenticationController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
+    @GetMapping(path = "verifyToken")
+    public ResponseEntity verifyToken(@RequestHeader("Device-info") String device) throws Exception {
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     private void authenticate(String email, String password) throws Exception {
         if (StringUtils.isEmpty(email) || StringUtils.isEmpty(password)) {
             throw new Exception("Empty credentials");
