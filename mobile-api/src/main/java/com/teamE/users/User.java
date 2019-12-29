@@ -12,15 +12,16 @@ import java.util.Set;
 @Data
 @Builder(access = AccessLevel.PUBLIC)
 @Entity
-@Table(name = "USERS_T")
+@Table(name = "users")
 public class User implements Serializable {
     @Singular
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "USER_ROLES_T",
+    @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     Set<UserRole> userRoles;
     int indexNumber;
+    @Enumerated(EnumType.STRING)
     StudentHouse studentHouse;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
