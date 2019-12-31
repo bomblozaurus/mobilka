@@ -10,6 +10,8 @@ import com.teamE.commonAddsEvents.Scope;
 import com.teamE.events.manager.EventManager;
 import com.teamE.users.StudentHouse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +29,9 @@ public class EventsController {
     }
 
     @GetMapping
-    public Iterable<Event> getAllEventsAvailableForUser(){
+    public Page<Event> getAllEventsAvailableForUser(final Pageable pageable){
         //TODO sprawdzac rolę użytokownika i zwracac tylko wydarzenia z odpowiednich scope'ów
-        return eventsRepo.findAll();
+        return eventsRepo.findAll(pageable);
     }
 
    @GetMapping("/scope")
