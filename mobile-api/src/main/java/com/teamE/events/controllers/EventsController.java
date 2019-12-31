@@ -4,35 +4,34 @@ package com.teamE.events.controllers;
 import com.teamE.commonAddsEvents.converters.ScopeConverter;
 import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
 import com.teamE.commonAddsEvents.Address;
+import com.teamE.events.data.EventsRepo;
 import com.teamE.events.data.entity.Event;
 import com.teamE.commonAddsEvents.Scope;
 import com.teamE.events.manager.EventManager;
 import com.teamE.users.StudentHouse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/events")
 public class EventsController {
 
     private EventManager eventManager;
+    private EventsRepo eventsRepo;
 
     @Autowired
-    public EventsController(EventManager eventManager) {
+    public EventsController(EventManager eventManager, EventsRepo eventsRepo) {
         this.eventManager = eventManager;
-    }
-
-    @GetMapping("/all")
-    public Iterable<Event> getAll() {
-        return eventManager.findAll();
+        this.eventsRepo = eventsRepo;
     }
 
     @GetMapping
-    public Optional<Event> getById(@RequestParam Long index) {
-        return eventManager.findById(index);
+    public Page<Event> getAllEventsAvailableForUser(final Pageable pageable){
+        //TODO sprawdzac rolę użytokownika i zwracac tylko wydarzenia z odpowiednich scope'ów
+        return eventsRepo.findAll(pageable);
     }
 
    @GetMapping("/scope")
@@ -60,16 +59,6 @@ public class EventsController {
     @PostMapping("/address")
     public Address addAddress(@RequestBody Address address) {
         return eventManager.save(address);
-    }
-
-    @PostMapping
-    public Event addEvent(@RequestBody Event event) {
-        return eventManager.save(event);
-    }
-
-    @DeleteMapping
-    public void deleteEvent(@RequestParam Long index) {
-        eventManager.deleteById(index);
     }
 
     @InitBinder

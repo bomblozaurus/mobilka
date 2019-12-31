@@ -1,31 +1,40 @@
 package com.teamE.rooms;
 
+import com.teamE.users.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+
 @Entity
+@Table(name = "rooms")
 public class Room {
-
-
-    public Room(int dsNumber, String name) {
-
-        this.dsNumber = dsNumber;
-        this.name = name;
-    }
-
-    public Room() {
-
-    }
-
     @Id
-    private int id;
+    @GeneratedValue
+    private long id;
+
     @Column(nullable = false)
     private int dsNumber;
 
     @Column(nullable = false)
     private String name;
 
+    private String description;
+
+    @OneToOne
+    @JoinColumn(name = "keyholder_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "configuration_id", nullable = false)
+    private RoomConfiguration configuration = RoomConfiguration.getDefaultConfiguration();
 }
+
+
