@@ -30,10 +30,11 @@ public class Room {
 
     @OneToOne
     @JoinColumn(name = "keyholder_id")
-    private User user;
+    private User keyholder;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "configuration_id", nullable = false)
+    @Builder.Default
     private RoomConfiguration configuration = RoomConfiguration.getDefaultConfiguration();
 }
 

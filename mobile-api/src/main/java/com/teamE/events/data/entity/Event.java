@@ -1,7 +1,6 @@
 package com.teamE.events.data.entity;
 
 
-import com.teamE.commonAddsEvents.Address;
 import com.teamE.commonAddsEvents.Scope;
 import com.teamE.users.StudentHouse;
 import lombok.Data;
@@ -28,18 +27,6 @@ public class Event {
     @Lob
     private byte[] image;
     private Scope scope;
+    @Enumerated(EnumType.STRING)
     private StudentHouse studentHouse;
-
-//   public Event(String name, Date date, Address address, String description, byte[] image, Scope scope) {
-//        this.name = name;
-//        this.date = date;
-//        this.address = address;
-//        this.description = description;
-//        this.image = image;
-//        this.scope = scope;
-//    }
-
-   /* public Event(Address address) {
-        this.address = address;
-    }*/
 }

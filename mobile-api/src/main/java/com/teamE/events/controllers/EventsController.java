@@ -1,12 +1,12 @@
 package com.teamE.events.controllers;
 
-
+import com.teamE.common.UsersDemandingController;
+import com.teamE.commonAddsEvents.Address;
+import com.teamE.commonAddsEvents.Scope;
 import com.teamE.commonAddsEvents.converters.ScopeConverter;
 import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
-import com.teamE.commonAddsEvents.Address;
 import com.teamE.events.data.EventsRepo;
 import com.teamE.events.data.entity.Event;
-import com.teamE.commonAddsEvents.Scope;
 import com.teamE.events.manager.EventManager;
 import com.teamE.users.StudentHouse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/events")
-public class EventsController {
+@RestController()
+@RequestMapping("events")
+public class EventsController extends UsersDemandingController {
 
     private EventManager eventManager;
     private EventsRepo eventsRepo;
@@ -29,12 +29,17 @@ public class EventsController {
     }
 
     @GetMapping
-    public Page<Event> getAllEventsAvailableForUser(final Pageable pageable){
+    public Page<Event> getAllEventsAvailableForUser(final Pageable pageable) {
         //TODO sprawdzac rolę użytokownika i zwracac tylko wydarzenia z odpowiednich scope'ów
         return eventsRepo.findAll(pageable);
     }
 
-   @GetMapping("/scope")
+    public Page<Event> findForUser(final Pageable pageable, final String query) {
+        //FIXME dodać scope
+        return eventsRepo.findAllByScopeAndStudentHouseAndQuery(null, getUserStudentHouse(), query, pageable);
+    }
+
+    @GetMapping("/scope")
     public Iterable<Event> getByScope(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
         if (scope.equals(Scope.DORMITORY)) {
             return eventManager.findByScopeAndStudentHouse(scope, studentHouse);
@@ -42,6 +47,7 @@ public class EventsController {
             return eventManager.findByScope(scope);
         }
     }
+
     @GetMapping("/scopeOrderDate")
     public Iterable<Event> getByScopeOrderByDateDesc(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
         if (scope.equals(Scope.DORMITORY)) {
