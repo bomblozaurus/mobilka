@@ -8,8 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -33,9 +35,27 @@ public class Reservation {
 
     private LocalDateTime dateTime;
 
-    private LocalTime duration;
+    private Duration duration;
 
     private int numberOfPeople;
 
+    private boolean accepted;
+
+    public BigDecimal getPrice() {
+        Duration interval = this.getRoom().getConfiguration().getRentInterval();
+
+        int intervalsCount = getIntervalsCount(interval);
+        BigDecimal pricePerInterval = this.getRoom().getConfiguration().getPricePerInterval();
+        return Objects.equals(null, pricePerInterval) ? BigDecimal.ZERO : pricePerInterval.multiply(BigDecimal.valueOf(intervalsCount));
+    }
+
+    private int getIntervalsCount(Duration interval) {
+        Duration sum = interval;
+        int intervalCount = 1;
+        for (; sum.compareTo(this.duration) < 0; intervalCount++) {
+            sum = sum.plus(interval);
+        }
+        return intervalCount;
+    }
 }
 

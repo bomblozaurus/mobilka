@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 @RepositoryRestResource(excerptProjection = RoomWithConfigurationProjection.class)
-public interface RoomRepository extends JpaRepository<Room, Integer> {
+public interface RoomRepository extends JpaRepository<Room, Long> {
     Page<RoomWithConfigurationProjection> getAllByDsNumber(int dsNumber, Pageable p);
 
     List<Room> getAllByKeyholder(User keyholder);

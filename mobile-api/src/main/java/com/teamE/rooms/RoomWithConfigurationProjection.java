@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalTime;
 
 @Projection(name = "configuration", types = Room.class)
@@ -23,7 +24,7 @@ public interface RoomWithConfigurationProjection {
     LocalTime getOpenTo();
 
     @Value("#{target.getConfiguration().getRentInterval()}")
-    LocalTime getRentInterval();
+    Duration getRentInterval();
 
     @Value("#{target.getConfiguration().getPricePerInterval()}")
     BigDecimal getPricePerInterval();

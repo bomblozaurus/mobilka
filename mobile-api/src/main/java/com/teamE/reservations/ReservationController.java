@@ -3,17 +3,17 @@ package com.teamE.reservations;
 import com.teamE.common.UsersDemandingController;
 import com.teamE.rooms.Room;
 import com.teamE.rooms.RoomRepository;
+import com.teamE.rooms.RoomWithConfigurationProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@RestController()
+@RestController
 @RequestMapping("reservations")
 public class ReservationController extends UsersDemandingController {
 
@@ -30,20 +30,28 @@ public class ReservationController extends UsersDemandingController {
     }
 
     @PostMapping
-    public Reservation reserve(ReservationPOJO pojo) {
+    @ResponseBody
+    public Reservation reserve(@RequestBody ReservationPOJO pojo) {
         Reservation reservation = reservationPOJOToReservationTransformer.transform(pojo);
         reservation.setUser(getUser());
         return reservationRepo.save(reservation);
     }
 
     @GetMapping
-    public Page<Reservation> getUserReservations(final Pageable pageable) {
-        return reservationRepo.getAllByUserId(getUserId(), pageable);
+    public Page<SimpleReservationProjection> getUserReservations(final Pageable pageable, @RequestParam final String query) {
+        Collection<Room> matchingRooms = getMatchingRooms(query);
+        return reservationRepo.getAllByUserIdAndRoomIn(getUserId(), matchingRooms, pageable);
     }
 
     @GetMapping("keyholder")
-    public Page<Reservation> getKeyHolderReservations(final Pageable pageable) {
+    public Page<SimpleReservationProjection> getKeyHolderReservations(final Pageable pageable, @RequestParam final String query) {
         List<Room> keyHolderRooms = roomRepository.getAllByKeyholder(getUser());
         return reservationRepo.getAllByRoomIn(keyHolderRooms, pageable);
+    }
+
+    private Collection<Room> getMatchingRooms(@RequestParam String query) {
+        Collection<RoomWithConfigurationProjection> matchingRoomProjections = roomRepository.getAllByDsNumberAndQuery(getUserStudentHouseId(), query, null).getContent();
+        Collection<Long> matchingRoomIds = matchingRoomProjections.stream().map(RoomWithConfigurationProjection::getId).collect(Collectors.toList());
+        return roomRepository.findAllById(matchingRoomIds);
     }
 }

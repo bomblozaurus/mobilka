@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalTime;
 
 @Data
@@ -34,19 +35,18 @@ public class RoomConfiguration {
     @NotNull
     private LocalTime openTo;
 
-    @NotNull
-    private LocalTime rentInterval;
-
-    private BigDecimal pricePerInterval;
-
     private final static RoomConfiguration defaultConfiguration = RoomConfiguration.builder()
             .id(1L)
             .name("DEFAULT")
             .openFrom(LocalTime.of(12, 0))
             .openTo(LocalTime.of(22, 0))
-            .rentInterval(LocalTime.of(0, 15))
+            .rentInterval(Duration.ofMinutes(15))
             .pricePerInterval(null)
             .build();
+
+    private BigDecimal pricePerInterval;
+    @NotNull
+    private Duration rentInterval;
 
     public static RoomConfiguration getDefaultConfiguration() {
         return defaultConfiguration;
