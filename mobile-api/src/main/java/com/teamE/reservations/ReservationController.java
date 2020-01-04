@@ -72,8 +72,9 @@ public class ReservationController extends UsersDemandingController {
     @GetMapping("freeForRoom")
     public Map<LocalTime, List<Duration>>getFreeHoursForRoom(@RequestParam long roomId, @RequestParam String date){
         HashMap<LocalTime,List<Duration>> map = new HashMap<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // Zostawiłem godziny by łatwiej było przekazywac z apki bo chyba w takim formacie tam jest zapisane ale mozna je smialo wypierdolic
-        LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate ld = LocalDate.parse(date, formatter);
+        LocalDateTime dateTime = LocalDateTime.of(ld, LocalDateTime.now().toLocalTime());
         List <Reservation> list = reservationRepo.getAllByRoomIdAndCalendarDate(roomId,dateTime.getYear(),dateTime.getMonth().getValue(),dateTime.getDayOfMonth());
         Room room = roomRepository.getOne(roomId);
         int countOfAvailableIntervals = (int) (((room.getConfiguration().getOpenTo().toSecondOfDay() - room.getConfiguration().getOpenFrom().toSecondOfDay())/room.getConfiguration().getRentInterval().getSeconds()));
