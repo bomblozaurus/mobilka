@@ -57,5 +57,6 @@ public class Reservation {
         }
         return intervalCount;
     }
+
 }
 
