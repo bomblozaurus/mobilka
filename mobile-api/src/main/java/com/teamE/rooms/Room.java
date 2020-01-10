@@ -36,6 +36,8 @@ public class Room {
     @JoinColumn(name = "configuration_id", nullable = false)
     @Builder.Default
     private RoomConfiguration configuration = RoomConfiguration.getDefaultConfiguration();
+
+    private Integer mainImage;
 }
 
 

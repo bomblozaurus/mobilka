@@ -24,8 +24,7 @@ public class Event {
     private String city;
     private String zip;
     private String description;
-    @Lob
-    private byte[] image;
+    private Long mainImage;
     private Scope scope;
     @Enumerated(EnumType.STRING)
     private StudentHouse studentHouse;

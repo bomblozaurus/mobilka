@@ -8,6 +8,9 @@ import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
 import com.teamE.events.data.EventsRepo;
 import com.teamE.events.data.entity.Event;
 import com.teamE.events.manager.EventManager;
+import com.teamE.imageDestinations.Destination;
+import com.teamE.imageDestinations.ImageDestination;
+import com.teamE.imageDestinations.ImageDestinationRepo;
 import com.teamE.users.StudentHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,17 +18,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController()
 @RequestMapping("events")
 public class EventsController extends UsersDemandingController {
 
     private EventManager eventManager;
     private EventsRepo eventsRepo;
+    private ImageDestinationRepo imageDestinationRepo;
 
     @Autowired
-    public EventsController(EventManager eventManager, EventsRepo eventsRepo) {
+    public EventsController(EventManager eventManager, EventsRepo eventsRepo, ImageDestinationRepo imageDestinationRepo) {
         this.eventManager = eventManager;
         this.eventsRepo = eventsRepo;
+        this.imageDestinationRepo = imageDestinationRepo;
     }
 
     @GetMapping
@@ -46,6 +53,11 @@ public class EventsController extends UsersDemandingController {
         } else {
             return eventManager.findByScope(scope);
         }
+    }
+
+    @PostMapping
+    public Event addProduct(@RequestBody Event event) {
+        return eventsRepo.save(event);
     }
 
     @GetMapping("/scopeOrderDate")
