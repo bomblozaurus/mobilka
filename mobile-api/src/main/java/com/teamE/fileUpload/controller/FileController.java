@@ -72,7 +72,7 @@ public class FileController {
         return fetchImage(image.get(), request);
     }
 
-    @GetMapping("/events/downloadMainImage")
+    @GetMapping("/downloadMainImage")
     public ResponseEntity<Resource> downloadMainImage(@RequestParam Long idEvent, HttpServletRequest request) {
         Optional<Event> optionalEvent = eventsRepo.findById(idEvent);
         if(optionalEvent.isEmpty()) {
