@@ -24,7 +24,6 @@ public class Ad {
     @OneToOne(targetEntity= Address.class)
     private Address address;
     private String description;
-    private Set<Long> additionalImages;
     private Long mainImage;
     private Scope scope;
     private StudentHouse studentHouse;

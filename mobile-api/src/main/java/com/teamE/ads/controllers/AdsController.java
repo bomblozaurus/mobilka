@@ -79,7 +79,7 @@ public class AdsController {
         Ad savedAd = adManager.save(ad);
 
         Long mainImage = ad.getMainImage();
-        Set<Long> additionalImages = ad.getAdditionalImages();
+/*        Set<Long> additionalImages = ad.getAdditionalImages();*/
 
         Optional<ImageDestination> temp = imageDestinationRepo.findById(mainImage);
         if (temp.isPresent()) {
@@ -87,7 +87,7 @@ public class AdsController {
             imageDestinationRepo.save(temp.get());
         }
 
-        if (CollectionUtils.isNotEmpty(additionalImages)) {
+/*        if (CollectionUtils.isNotEmpty(additionalImages)) {
             for (Long image : additionalImages) {
                 temp = imageDestinationRepo.findById(image);
                 if (temp.isPresent()) {
@@ -95,7 +95,7 @@ public class AdsController {
                     imageDestinationRepo.save(temp.get());
                 }
             }
-        }
+        }*/
         return savedAd;
     }
 

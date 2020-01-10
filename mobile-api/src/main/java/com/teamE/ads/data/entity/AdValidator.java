@@ -37,7 +37,7 @@ public class AdValidator implements Validator {
             ValidationUtils.rejectIfEmpty(errors, "mainImage", "This image not exists or is already used");
         }
 
-        Set<Long> additionalImages = ad.getAdditionalImages();
+/*        Set<Long> additionalImages = ad.getAdditionalImages();
         if (additionalImages != null) {
             if (CollectionUtils.isNotEmpty(additionalImages)) {
                 for (Long image : additionalImages) {
@@ -46,6 +46,6 @@ public class AdValidator implements Validator {
                     }
                 }
             }
-        }
+        }*/
     }
 }
