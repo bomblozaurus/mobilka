@@ -22,6 +22,7 @@ public class RoomPOJOToRoomTransformer implements Transformer<RoomPOJO, Room> {
                 .description(pojo.getDescription())
                 .dsNumber(pojo.getDsNumber())
                 .name(pojo.getName())
+                .mainImage(pojo.getMainImage())
                 .configuration(this.getConfiguration(pojo.getConfigurationId()))
                 .build();
     }

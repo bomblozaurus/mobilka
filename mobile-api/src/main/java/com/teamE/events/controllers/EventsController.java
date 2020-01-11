@@ -52,11 +52,6 @@ public class EventsController extends UsersDemandingController {
         return eventsRepo.findAll(pageable);
     }
 
-/*    @GetMapping("/id")
-    public Optional<Event> getAll(@RequestParam Long id) {
-        return eventsRepo.findById(id);
-    }*/
-
     public Page<Event> findForUser(final Pageable pageable, final String query) {
         //FIXME dodać scope
         return eventsRepo.findAllByScopeAndStudentHouseAndQuery(null, getUserStudentHouse(), query, pageable);
@@ -83,7 +78,7 @@ public class EventsController extends UsersDemandingController {
             temp.get().setDestination(Destination.EVENT);
             imageDestinationRepo.save(temp.get());
         }
-        return eventsRepo.save(event);
+        return savedEvent;
     }
 
     @GetMapping("/scopeOrderDate")
@@ -99,11 +94,6 @@ public class EventsController extends UsersDemandingController {
     public Address getAddress() {
         return new Address();
     }
-
-/*    @PostMapping("/address")
-    public Address addAddress(@RequestBody Address address) {
-        return eventManager.save(address);
-    }*/
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

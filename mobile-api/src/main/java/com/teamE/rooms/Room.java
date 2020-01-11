@@ -37,7 +37,7 @@ public class Room {
     @Builder.Default
     private RoomConfiguration configuration = RoomConfiguration.getDefaultConfiguration();
 
-    private Integer mainImage;
+    private Long mainImage;
 }
 
 
