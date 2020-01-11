@@ -8,12 +8,14 @@ import com.teamE.imageDestinations.ImageDestinationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -21,23 +23,24 @@ import java.util.Optional;
 @RequestMapping("rooms")
 public class RoomController extends UsersDemandingController {
     private RoomRepository roomRepository;
-    private RoomWithConfigurationProjectionProcessor roomProcessor;
+    private RoomWithConfigurationProjectionProcessor roomWithConfigurationProjectionProcessor;
     private RoomPOJOToRoomTransformer roomPOJOToRoomTransformer;
     private RoomPOJOValidator roomPOJOValidator;
     private ImageDestinationRepo imageDestinationRepo;
 
     @Autowired
-    public RoomController(RoomRepository roomRepository, RoomWithConfigurationProjectionProcessor roomProcessor, RoomPOJOToRoomTransformer roomPOJOToRoomTransformer, RoomPOJOValidator roomPOJOValidator, ImageDestinationRepo imageDestinationRepo) {
+    public RoomController(RoomRepository roomRepository, RoomWithConfigurationProjectionProcessor roomWithConfigurationProjectionProcessor, RoomPOJOToRoomTransformer roomPOJOToRoomTransformer, RoomPOJOValidator roomPOJOValidator, ImageDestinationRepo imageDestinationRepo) {
         this.roomRepository = roomRepository;
-        this.roomProcessor = roomProcessor;
+        this.roomWithConfigurationProjectionProcessor = roomWithConfigurationProjectionProcessor;
         this.roomPOJOToRoomTransformer = roomPOJOToRoomTransformer;
         this.roomPOJOValidator = roomPOJOValidator;
         this.imageDestinationRepo = imageDestinationRepo;
     }
 
     @GetMapping("available")
-    public Page<RoomWithConfigurationProjection> getAllForUser(final Pageable pageable) {
-        return roomRepository.getAllByDsNumber(getUserStudentHouseId(), pageable);
+    public  Page<EntityModel<RoomWithConfigurationProjection>> getAllForUser(final Pageable pageable) {
+        Page<RoomWithConfigurationProjection> page = roomRepository.getAllByDsNumber(getUserStudentHouseId(), pageable);
+        return page.map(e -> roomWithConfigurationProjectionProcessor.process(e));
     }
 
     @PostMapping()

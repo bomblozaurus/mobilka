@@ -72,7 +72,7 @@ public class FileController {
         return fetchImage(image.get(), request);
     }
 
-    @GetMapping("/downloadMainImage")
+/*    @GetMapping("/downloadMainImage")
     public ResponseEntity<Resource> downloadMainImage(@RequestParam Long idEvent, HttpServletRequest request) {
         Optional<Event> optionalEvent = eventsRepo.findById(idEvent);
         if(optionalEvent.isEmpty()) {
@@ -82,6 +82,15 @@ public class FileController {
         Optional<ImageDestination>  mainImage = imageDestinationRepo.findById(optionalEvent.get().getMainImage());
         if(mainImage.isEmpty()) {
             throw new MyFileNotFoundException("Event with id:  " + idEvent + "dont have main image");
+        }
+        return fetchImage(mainImage.get(), request);
+    }*/
+
+    @GetMapping("/downloadMainImage")
+    public ResponseEntity<Resource> downloadMainImage(@RequestParam Long id, HttpServletRequest request) {
+        Optional<ImageDestination>  mainImage = imageDestinationRepo.findById(id);
+        if(mainImage.isEmpty()) {
+            throw new MyFileNotFoundException("Image with id " + id + " not exits" );
         }
         return fetchImage(mainImage.get(), request);
     }

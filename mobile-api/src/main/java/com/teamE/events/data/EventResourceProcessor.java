@@ -36,7 +36,7 @@ public class EventResourceProcessor {
                                 .getRequest();
 
                 resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
-                        downloadMainImage(Objects.requireNonNull(resource.getContent()).getId(), request)).withRel("mainImage"));
+                        downloadMainImage(Objects.requireNonNull(resource.getContent()).getMainImage(), request)).withRel("mainImage"));
 
                 return resource;
             }

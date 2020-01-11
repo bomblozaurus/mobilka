@@ -17,6 +17,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     List<Room> getAllByKeyholder(User keyholder);
 
+    List<Room> findAllById(Long id);
+
     default Page<RoomWithConfigurationProjection> getAllByDsNumberAndQuery(int dsNumber, String query, Pageable pageable) {
         return this.getAllByDsNumberAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(dsNumber, query, query, pageable);
     }

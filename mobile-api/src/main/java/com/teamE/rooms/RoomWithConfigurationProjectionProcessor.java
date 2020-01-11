@@ -30,7 +30,7 @@ public class RoomWithConfigurationProjectionProcessor implements RepresentationM
                         .getRequest();
 
         model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
-                downloadMainImage(Objects.requireNonNull(model.getContent()).getId(), request)).withRel("mainImage"));
+                downloadMainImage(Objects.requireNonNull(model.getContent()).getMainImage(), request)).withRel("mainImage"));
         return model;
     }
 

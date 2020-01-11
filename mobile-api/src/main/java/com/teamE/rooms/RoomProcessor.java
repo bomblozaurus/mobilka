@@ -29,7 +29,7 @@ public class RoomProcessor implements RepresentationModelProcessor<EntityModel<R
                         .getRequest();
 
         model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
-                downloadMainImage(Objects.requireNonNull(model.getContent()).getId(), request)).withRel("mainImage"));
+                downloadMainImage(Objects.requireNonNull(model.getContent()).getMainImage(), request)).withRel("mainImage"));
 
         try {
             model.add(repositoryEntityLinks.linkToItemResource(RoomConfigurationRepository.class, model.getContent().getConfiguration().getId().toString()));
