@@ -52,10 +52,10 @@ public class EventsController extends UsersDemandingController {
         return eventsRepo.findAll(pageable);
     }
 
-    @GetMapping("/id")
+/*    @GetMapping("/id")
     public Optional<Event> getAll(@RequestParam Long id) {
         return eventsRepo.findById(id);
-    }
+    }*/
 
     public Page<Event> findForUser(final Pageable pageable, final String query) {
         //FIXME dodać scope
@@ -100,10 +100,10 @@ public class EventsController extends UsersDemandingController {
         return new Address();
     }
 
-    @PostMapping("/address")
+/*    @PostMapping("/address")
     public Address addAddress(@RequestBody Address address) {
         return eventManager.save(address);
-    }
+    }*/
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

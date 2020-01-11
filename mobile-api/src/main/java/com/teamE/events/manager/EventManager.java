@@ -32,15 +32,15 @@ public class EventManager {
         return eventsRepo.findById(id);
     }
 
-    public Event save(Event event) {
- /*       this.save(event.getAddress());*/
+/*    public Event save(Event event) {
+ *//*       this.save(event.getAddress());*//*
         return eventsRepo.save(event);
     }
 
     public Address save(Address address) {
         //addressRepo.save(event.getAddress());
         return addressRepo.save(address);
-    }
+    }*/
 
     public Iterable<Event> findByScopeAndStudentHouse(Scope scope, StudentHouse studentHouse){
         return eventsRepo.findByScopeAndStudentHouse(scope, studentHouse);

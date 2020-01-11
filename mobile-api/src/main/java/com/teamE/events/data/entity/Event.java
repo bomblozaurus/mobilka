@@ -5,6 +5,7 @@ import com.teamE.commonAddsEvents.Scope;
 import com.teamE.users.StudentHouse;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.util.Date;
