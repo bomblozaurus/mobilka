@@ -1,6 +1,8 @@
 package com.teamE.ads.controllers;
 
 import com.teamE.ads.data.entity.Ad;
+import com.teamE.ads.data.entity.AdPOJO;
+import com.teamE.ads.data.entity.AdPOJOToAdTransformer;
 import com.teamE.ads.data.entity.AdValidator;
 import com.teamE.ads.managers.AdManager;
 import com.teamE.common.ValidationHandler;
@@ -8,6 +10,7 @@ import com.teamE.commonAddsEvents.Address;
 import com.teamE.commonAddsEvents.Scope;
 import com.teamE.commonAddsEvents.converters.ScopeConverter;
 import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
+import com.teamE.imageDestinations.Destination;
 import com.teamE.imageDestinations.ImageDestination;
 import com.teamE.imageDestinations.ImageDestinationRepo;
 import com.teamE.users.StudentHouse;
@@ -28,14 +31,15 @@ public class AdsController {
     private AdManager adManager;
     private ImageDestinationRepo imageDestinationRepo;
     private AdValidator adValidator;
+    private AdPOJOToAdTransformer adPOJOToAdTransformer;
 
     @Autowired
-    public AdsController(AdManager adManager, ImageDestinationRepo imageDestinationRepo, AdValidator adValidator) {
+    public AdsController(AdManager adManager, ImageDestinationRepo imageDestinationRepo, AdValidator adValidator, AdPOJOToAdTransformer adPOJOToAdTransformer) {
         this.adManager = adManager;
         this.imageDestinationRepo = imageDestinationRepo;
         this.adValidator = adValidator;
+        this.adPOJOToAdTransformer = adPOJOToAdTransformer;
     }
-
 
     @GetMapping("/all")
     public Iterable<Ad> getAll() {
@@ -75,27 +79,32 @@ public class AdsController {
     }
 
     @PostMapping
-    public Ad addAd(@RequestBody @Validated Ad ad) {
+    public Ad addAd(@RequestBody @Validated AdPOJO adPojo) {
+        Ad ad= adPOJOToAdTransformer.transform(adPojo);
         Ad savedAd = adManager.save(ad);
 
         Long mainImage = ad.getMainImage();
-/*        Set<Long> additionalImages = ad.getAdditionalImages();*/
+        List<Long> additionalImages = adPojo.getAdditionalImages();
 
         Optional<ImageDestination> temp = imageDestinationRepo.findById(mainImage);
         if (temp.isPresent()) {
-            temp.get().setIdDestination(savedAd.getId());
-            imageDestinationRepo.save(temp.get());
+            ImageDestination imageDestination = temp.get();
+            imageDestination.setIdDestination(savedAd.getId());
+            imageDestination.setDestination(Destination.AD);
+            imageDestinationRepo.save(imageDestination);
         }
 
-/*        if (CollectionUtils.isNotEmpty(additionalImages)) {
+        if (CollectionUtils.isNotEmpty(additionalImages)) {
             for (Long image : additionalImages) {
                 temp = imageDestinationRepo.findById(image);
                 if (temp.isPresent()) {
-                    temp.get().setIdDestination(savedAd.getId());
-                    imageDestinationRepo.save(temp.get());
+                    ImageDestination imageDestination = temp.get();
+                    imageDestination.setIdDestination(savedAd.getId());
+                    imageDestination.setDestination(Destination.AD);
+                    imageDestinationRepo.save(imageDestination);
                 }
             }
-        }*/
+        }
         return savedAd;
     }
 

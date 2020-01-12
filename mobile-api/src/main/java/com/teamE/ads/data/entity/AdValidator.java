@@ -24,20 +24,20 @@ public class AdValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return Ad.class.equals(aClass);
+        return AdPOJO.class.equals(aClass);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
         ValidationUtils.rejectIfEmpty(errors, "name", "name.empty");
         ValidationUtils.rejectIfEmpty(errors, "scope", "scope.empty");
-        Ad ad = (Ad) o;
+        AdPOJO adPOJO = (AdPOJO) o;
 
-        if (!imageDestinationRepo.existsByIdAndIdDestination(ad.getMainImage(), -1L)) {
-            ValidationUtils.rejectIfEmpty(errors, "mainImage", "This image not exists or is already used");
+        if (!imageDestinationRepo.existsByIdAndIdDestination(adPOJO.getMainImage(), -1L)) {
+            errors.rejectValue("mainImage", "This image not exists or is already used");
         }
 
-/*        Set<Long> additionalImages = ad.getAdditionalImages();
+        List<Long> additionalImages = adPOJO.getAdditionalImages();
         if (additionalImages != null) {
             if (CollectionUtils.isNotEmpty(additionalImages)) {
                 for (Long image : additionalImages) {
@@ -46,6 +46,6 @@ public class AdValidator implements Validator {
                     }
                 }
             }
-        }*/
+        }
     }
 }
