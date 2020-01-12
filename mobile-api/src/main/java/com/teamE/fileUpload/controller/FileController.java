@@ -63,28 +63,13 @@ public class FileController {
 
 
     @GetMapping("/downloadAdditionalImage")
-    public ResponseEntity<Resource> downloadAdditionalImage(@RequestParam Long idImage, HttpServletRequest request) {
-
-        Optional<ImageDestination>  image = imageDestinationRepo.findById(idImage);
-        if(image.isEmpty()) {
-            throw new MyFileNotFoundException("Image with id:  " + idImage + "dont exists");
+    public ResponseEntity<Resource> downloadAdditionalImage(@RequestParam Long id, HttpServletRequest request) {
+        Optional<ImageDestination>  additionalImage = imageDestinationRepo.findById(id);
+        if(additionalImage.isEmpty()) {
+            throw new MyFileNotFoundException("Image with id " + id + " not exits" );
         }
-        return fetchImage(image.get(), request);
+        return fetchImage(additionalImage.get(), request);
     }
-
-/*    @GetMapping("/downloadMainImage")
-    public ResponseEntity<Resource> downloadMainImage(@RequestParam Long idEvent, HttpServletRequest request) {
-        Optional<Event> optionalEvent = eventsRepo.findById(idEvent);
-        if(optionalEvent.isEmpty()) {
-            throw new MyFileNotFoundException("Event with id:  " + idEvent + "not found");
-        }
-
-        Optional<ImageDestination>  mainImage = imageDestinationRepo.findById(optionalEvent.get().getMainImage());
-        if(mainImage.isEmpty()) {
-            throw new MyFileNotFoundException("Event with id:  " + idEvent + "dont have main image");
-        }
-        return fetchImage(mainImage.get(), request);
-    }*/
 
     @GetMapping("/downloadMainImage")
     public ResponseEntity<Resource> downloadMainImage(@RequestParam Long id, HttpServletRequest request) {

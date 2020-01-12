@@ -11,6 +11,8 @@ public interface AdsRepo extends CrudRepository<Ad,Long> {
     Iterable<Ad> findByScopeAndStudentHouse(Scope scope, StudentHouse studentHouse);
     Iterable<Ad> findByScope(Scope scope);
 
+    Iterable<Ad> findAllById(Long id);
+
 
     Iterable<Ad> findByScopeAndStudentHouseOrderByPriceDesc(Scope scope, StudentHouse studentHouse);
     Iterable<Ad> findByScopeOrderByPriceDesc(Scope scope);
