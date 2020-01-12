@@ -62,8 +62,9 @@ public class RoomController extends UsersDemandingController {
 
     }
 
-    public Page<RoomWithConfigurationProjection> findForUser(final Pageable pageable, final String query) {
-        return roomRepository.getAllByDsNumberAndQuery(getUserStudentHouseId(), query, pageable);
+    public Page<EntityModel<RoomWithConfigurationProjection>> findForUser(final Pageable pageable, final String query) {
+        Page<RoomWithConfigurationProjection> page = roomRepository.getAllByDsNumberAndQuery(getUserStudentHouseId(), query, pageable);
+        return page.map(e -> roomWithConfigurationProjectionProcessor.process(e));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

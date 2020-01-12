@@ -7,6 +7,7 @@ import com.teamE.rooms.RoomWithConfigurationProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,12 +27,12 @@ public class SearchController {
     }
 
     @GetMapping("rooms")
-    public Page<RoomWithConfigurationProjection> findAvailableRooms(final Pageable pageable, @RequestParam("query") final String query){
+    public Page<EntityModel<RoomWithConfigurationProjection>> findAvailableRooms(final Pageable pageable, @RequestParam("query") final String query){
         return roomController.findForUser(pageable, query);
     }
 
     @GetMapping("events")
-    public Page<Event> findAvailableEvents(final Pageable pageable, @RequestParam("query") final String query){
+    public Page<EntityModel<Event>> findAvailableEvents(final Pageable pageable, @RequestParam("query") final String query){
         return eventsController.findForUser(pageable, query);
     }
 }
