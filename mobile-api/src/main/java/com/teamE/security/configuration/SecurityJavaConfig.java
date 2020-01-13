@@ -65,10 +65,7 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
                 .authorizeRequests()
-/*                .antMatchers("/events/**").permitAll()
-                .antMatchers("/ads/**").permitAll()
-                .antMatchers("/**").permitAll()*/
-                .antMatchers("/signUp", "/logIn","/images/**").permitAll()
+                .antMatchers("/signUp", "/logIn").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(successHandler).failureHandler(failureHandler()).and()
