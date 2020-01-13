@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 
@@ -36,6 +37,8 @@ public class Room {
     @JoinColumn(name = "configuration_id", nullable = false)
     @Builder.Default
     private RoomConfiguration configuration = RoomConfiguration.getDefaultConfiguration();
+
+    private Long mainImage;
 }
 
 

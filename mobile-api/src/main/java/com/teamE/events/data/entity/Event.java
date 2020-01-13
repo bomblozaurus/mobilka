@@ -5,6 +5,7 @@ import com.teamE.commonAddsEvents.Scope;
 import com.teamE.users.StudentHouse;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -24,8 +25,7 @@ public class Event {
     private String city;
     private String zip;
     private String description;
-    @Lob
-    private byte[] image;
+    private Long mainImage;
     private Scope scope;
     @Enumerated(EnumType.STRING)
     private StudentHouse studentHouse;

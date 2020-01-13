@@ -10,5 +10,6 @@ public class RoomPOJO {
     private String name;
     private String description;
     private Long configurationId;
+    private Long mainImage;
 
 }
