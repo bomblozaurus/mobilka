@@ -26,6 +26,7 @@ public class ReservationPOJOToReservationTransformer implements Transformer<Rese
     }
 
     private Room getRoom(long roomId) {
+        System.out.println(roomId);
         return roomRepository.findById(roomId).orElseThrow(ResourceNotFoundException::new);
     }
 }
