@@ -101,7 +101,7 @@ public class JwtUtil implements Serializable {
         Map<String, Object> claims = new HashMap<>();
         claims.put(DEVICE_KEY, deviceInformation);
         claims.put(NAME_KEY, userTokenInformation.getName());
-        claims.put(ROLE_KEY, userTokenInformation.getRoles());
+        claims.put(ROLE_KEY, userTokenInformation.getRole());
 
         Date now = new Date();
 

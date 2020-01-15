@@ -15,7 +15,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,6 +29,7 @@ public class RoomController extends UsersDemandingController {
 
     @Autowired
     public RoomController(RoomRepository roomRepository, RoomWithConfigurationProjectionProcessor roomWithConfigurationProjectionProcessor, RoomPOJOToRoomTransformer roomPOJOToRoomTransformer, RoomPOJOValidator roomPOJOValidator, ImageDestinationRepo imageDestinationRepo) {
+        super();
         this.roomRepository = roomRepository;
         this.roomWithConfigurationProjectionProcessor = roomWithConfigurationProjectionProcessor;
         this.roomPOJOToRoomTransformer = roomPOJOToRoomTransformer;
