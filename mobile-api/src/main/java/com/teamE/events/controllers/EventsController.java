@@ -84,12 +84,15 @@ public class EventsController extends UsersDemandingController {
 
         Long mainImage = savedEvent.getMainImage();
 
-        Optional<ImageDestination> temp = imageDestinationRepo.findById(mainImage);
-        if (temp.isPresent()) {
-            temp.get().setIdDestination(savedEvent.getId());
-            temp.get().setDestination(Destination.EVENT);
-            imageDestinationRepo.save(temp.get());
+        if (mainImage != null) {
+            Optional<ImageDestination> temp = imageDestinationRepo.findById(mainImage);
+            if (temp.isPresent()) {
+                temp.get().setIdDestination(savedEvent.getId());
+                temp.get().setDestination(Destination.EVENT);
+                imageDestinationRepo.save(temp.get());
+            }
         }
+
         return savedEvent;
     }
 

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -28,10 +29,14 @@ public class EventResourceProcessor implements RepresentationModelProcessor<Enti
         HttpServletRequest request =
                 ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
                         .getRequest();
+        Long mainImageId = Objects.requireNonNull(resource.getContent()).getMainImage();
+        if (mainImageId != null) {
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
+                    downloadMainImage(mainImageId, request)).withRel("mainImage"));
+        } else {
+            resource.add(new Link("https://archive.org/download/no-photo-available/no-photo-available.png").withRel("mainImage"));
 
-        resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
-                downloadMainImage(Objects.requireNonNull(resource.getContent()).getMainImage(), request)).withRel("mainImage"));
-
+        }
         return resource;
     }
 

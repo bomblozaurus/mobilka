@@ -26,8 +26,11 @@ public class RoomPOJOValidator implements Validator {
     public void validate(Object o, Errors errors) {
         RoomPOJO room = (RoomPOJO) o;
 
-        if (!imageDestinationRepo.existsByIdAndIdDestination(room.getMainImage(), -1L)) {
-            errors.rejectValue("mainImage", "This image not exists or is already used");
+        if (room.getMainImage() != null) {
+            if (!imageDestinationRepo.existsByIdAndIdDestination(room.getMainImage(), -1L)) {
+                errors.rejectValue("mainImage", "This image not exists or is already used");
+            }
         }
+
     }
 }
