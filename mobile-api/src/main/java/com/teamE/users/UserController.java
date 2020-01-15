@@ -10,6 +10,7 @@ public class UserController {
 
     private UserRepository userRepository;
 
+
     @Autowired
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -19,4 +20,6 @@ public class UserController {
     public User getUser(@PathVariable("id") long id) {
         return userRepository.getById(id);
     }
+
+
 }
