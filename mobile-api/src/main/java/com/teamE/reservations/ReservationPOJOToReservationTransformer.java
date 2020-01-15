@@ -22,7 +22,6 @@ public class ReservationPOJOToReservationTransformer implements Transformer<Rese
                 .duration(pojo.getDuration())
                 .numberOfPeople(pojo.getNumberOfPeople())
                 .room(getRoom(pojo.getRoomId()))
-                .accepted(false)
                 .build();
     }
 
