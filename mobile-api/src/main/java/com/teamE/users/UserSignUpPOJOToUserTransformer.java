@@ -17,7 +17,7 @@ public class UserSignUpPOJOToUserTransformer implements Transformer<UserSignUpPO
                 .email(pojo.getEmail())
                 .firstName(pojo.getFirstName())
                 .lastName(pojo.getLastName())
-                .userRole(createRoleIfNotFound("KEYHOLDER"))
+                .userRole(createRoleIfNotFound("USER"))
                 .password(pojo.getPassword())
                 .indexNumber(pojo.getIndexNumber())
                 .studentHouse(pojo.getStudentHouse())
