@@ -1,12 +1,9 @@
 package com.teamE.ads.controllers;
 
-import com.teamE.ads.data.entity.Ad;
-import com.teamE.ads.data.entity.AdPOJO;
-import com.teamE.ads.data.entity.AdPOJOToAdTransformer;
-import com.teamE.ads.data.entity.AdValidator;
-import com.teamE.ads.managers.AdManager;
+import com.teamE.ads.data.AdsRepo;
+import com.teamE.ads.data.entity.*;
+import com.teamE.common.UsersDemandingController;
 import com.teamE.common.ValidationHandler;
-import com.teamE.commonAddsEvents.Address;
 import com.teamE.commonAddsEvents.Scope;
 import com.teamE.commonAddsEvents.converters.ScopeConverter;
 import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
@@ -16,8 +13,10 @@ import com.teamE.imageDestinations.ImageDestinationRepo;
 import com.teamE.users.StudentHouse;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
@@ -27,61 +26,33 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/ads")
-public class AdsController {
-    private AdManager adManager;
+public class AdsController extends UsersDemandingController {
+
     private ImageDestinationRepo imageDestinationRepo;
     private AdValidator adValidator;
     private AdPOJOToAdTransformer adPOJOToAdTransformer;
+    private AdsRepo adsRepo;
+    private AdProcessor adProcessor;
 
     @Autowired
-    public AdsController(AdManager adManager, ImageDestinationRepo imageDestinationRepo, AdValidator adValidator, AdPOJOToAdTransformer adPOJOToAdTransformer) {
-        this.adManager = adManager;
+    public AdsController(ImageDestinationRepo imageDestinationRepo, AdValidator adValidator, AdPOJOToAdTransformer adPOJOToAdTransformer, AdsRepo adsRepo, AdProcessor adProcessor) {
         this.imageDestinationRepo = imageDestinationRepo;
         this.adValidator = adValidator;
         this.adPOJOToAdTransformer = adPOJOToAdTransformer;
+        this.adsRepo = adsRepo;
+        this.adProcessor = adProcessor;
     }
 
-    @GetMapping("/all")
-    public Iterable<Ad> getAll() {
-        return adManager.findAll();
-    }
-
-    @GetMapping
-    public Optional<Ad> getById(@RequestParam Long index) {
-        return adManager.findById(index);
-    }
-
-    @GetMapping("/scope")
-    public Iterable<Ad> getByScope(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
-        if (scope.equals(Scope.DORMITORY)) {
-            return adManager.findByScopeAndStudentHouse(scope, studentHouse);
-        } else {
-            return adManager.findByScope(scope);
-        }
-    }
-    @GetMapping("/scopeOrderPriceDesc")
-    public Iterable<Ad> getByScopeOrderByDateDesc(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
-        if (scope.equals(Scope.DORMITORY)) {
-            return adManager.findByScopeAndStudentHouseOrderByPriceDesc(scope, studentHouse);
-        } else {
-            return adManager.findByScopeOrderByPriceDesc(scope);
-        }
-    }
-
-    @GetMapping("/address")
-    public Address getAddress() {
-        return new Address();
-    }
-
-    @PostMapping("/address")
-    public Address addAddress(@RequestBody Address address) {
-        return adManager.save(address);
+    public Page<EntityModel<Ad>> findForUser(final Pageable pageable, final String query) {
+        //FIXME dodać scope
+        Page<Ad> page = adsRepo.findAllByScopeAndStudentHouseAndQuery(null, getUserStudentHouse(), query, pageable);
+        return page.map(e -> adProcessor.process(e));
     }
 
     @PostMapping
     public Ad addAd(@RequestBody @Validated AdPOJO adPojo) {
-        Ad ad= adPOJOToAdTransformer.transform(adPojo);
-        Ad savedAd = adManager.save(ad);
+        Ad ad = adPOJOToAdTransformer.transform(adPojo);
+        Ad savedAd = adsRepo.save(ad);
 
         Long mainImage = ad.getMainImage();
         List<Long> additionalImages = adPojo.getAdditionalImages();
@@ -110,11 +81,6 @@ public class AdsController {
             }
         }
         return savedAd;
-    }
-
-    @DeleteMapping
-    public void deleteAd(@RequestParam Long index) {
-        adManager.deleteById(index);
     }
 
     @InitBinder

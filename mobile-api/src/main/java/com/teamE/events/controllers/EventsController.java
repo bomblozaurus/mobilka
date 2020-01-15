@@ -2,7 +2,6 @@ package com.teamE.events.controllers;
 
 import com.teamE.common.UsersDemandingController;
 import com.teamE.common.ValidationHandler;
-import com.teamE.commonAddsEvents.Address;
 import com.teamE.commonAddsEvents.Scope;
 import com.teamE.commonAddsEvents.converters.ScopeConverter;
 import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
@@ -10,7 +9,6 @@ import com.teamE.events.data.EventResourceProcessor;
 import com.teamE.events.data.EventsRepo;
 import com.teamE.events.data.entity.Event;
 import com.teamE.events.data.entity.EventValidator;
-import com.teamE.events.manager.EventManager;
 import com.teamE.imageDestinations.Destination;
 import com.teamE.imageDestinations.ImageDestination;
 import com.teamE.imageDestinations.ImageDestinationRepo;
@@ -34,16 +32,15 @@ import java.util.Optional;
 @RequestMapping("events")
 public class EventsController extends UsersDemandingController {
 
-    private EventManager eventManager;
+
     private EventsRepo eventsRepo;
     private ImageDestinationRepo imageDestinationRepo;
     private EventValidator eventValidator;
     private EventResourceProcessor eventResourceProcessor;
 
     @Autowired
-    public EventsController(EventManager eventManager, EventsRepo eventsRepo, ImageDestinationRepo imageDestinationRepo, EventValidator eventValidator, EventResourceProcessor eventResourceProcessor) {
+    public EventsController(EventsRepo eventsRepo, ImageDestinationRepo imageDestinationRepo, EventValidator eventValidator, EventResourceProcessor eventResourceProcessor) {
         super();
-        this.eventManager = eventManager;
         this.eventsRepo = eventsRepo;
         this.imageDestinationRepo = imageDestinationRepo;
         this.eventValidator = eventValidator;
@@ -63,22 +60,6 @@ public class EventsController extends UsersDemandingController {
         return page.map(e -> eventResourceProcessor.process(e));
     }
 
-    @GetMapping("/scope")
-    public Iterable<EntityModel<Event>> getByScope(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
-        Iterable<Event> events;
-        if (scope.equals(Scope.DORMITORY)) {
-            events = eventManager.findByScopeAndStudentHouse(scope, studentHouse);
-        } else {
-            events = eventManager.findByScope(scope);
-        }
-        List<EntityModel<Event>> toReturn = new ArrayList<>();
-        for (Event e :
-                events) {
-            toReturn.add(eventResourceProcessor.process(e));
-        }
-        return toReturn;
-    }
-
     @PostMapping
     public Event addEvent(@RequestBody @Validated Event event) {
         Event savedEvent = eventsRepo.save(event);
@@ -95,27 +76,6 @@ public class EventsController extends UsersDemandingController {
         }
 
         return savedEvent;
-    }
-
-    @GetMapping("/scopeOrderDate")
-    public Iterable<EntityModel<Event>> getByScopeOrderByDateDesc(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
-        Iterable<Event> events;
-        if (scope.equals(Scope.DORMITORY)) {
-            events = eventManager.findByScopeAndStudentHouseOrderByDateDesc(scope, studentHouse);
-        } else {
-            events = eventManager.findByScopeOrderByDateDesc(scope);
-        }
-        List<EntityModel<Event>> toReturn = new ArrayList<>();
-        for (Event e :
-                events) {
-            toReturn.add(eventResourceProcessor.process(e));
-        }
-        return toReturn;
-    }
-
-    @GetMapping("/address")
-    public Address getAddress() {
-        return new Address();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

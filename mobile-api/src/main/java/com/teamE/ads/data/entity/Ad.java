@@ -1,8 +1,6 @@
 package com.teamE.ads.data.entity;
 
-import com.teamE.commonAddsEvents.Address;
 import com.teamE.commonAddsEvents.Scope;
-import com.teamE.imageDestinations.ImageDestination;
 import com.teamE.users.StudentHouse;
 import lombok.*;
 
@@ -20,10 +18,14 @@ public class Ad {
     private Long id;
     private String name;
     BigDecimal price;
-    @OneToOne(targetEntity= Address.class)
-    private Address address;
+    private String street;
+    private int houseNumber;
+    private int apartmentNumber;
+    private String city;
+    private String zip;
     private String description;
     private Long mainImage;
     private Scope scope;
+    @Enumerated(EnumType.STRING)
     private StudentHouse studentHouse;
 }
