@@ -17,7 +17,11 @@ public class AdPOJO {
     private Long id;
     private String name;
     BigDecimal price;
-    private Address address;
+    private String street;
+    private int houseNumber;
+    private int apartmentNumber;
+    private String city;
+    private String zip;
     private String description;
     private Long mainImage;
     private Scope scope;

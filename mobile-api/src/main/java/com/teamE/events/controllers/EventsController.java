@@ -1,9 +1,7 @@
 package com.teamE.events.controllers;
 
-import com.teamE.ads.data.entity.Ad;
 import com.teamE.common.UsersDemandingController;
 import com.teamE.common.ValidationHandler;
-import com.teamE.commonAddsEvents.Address;
 import com.teamE.commonAddsEvents.Scope;
 import com.teamE.commonAddsEvents.converters.ScopeConverter;
 import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
@@ -11,18 +9,15 @@ import com.teamE.events.data.EventResourceProcessor;
 import com.teamE.events.data.EventsRepo;
 import com.teamE.events.data.entity.Event;
 import com.teamE.events.data.entity.EventValidator;
-import com.teamE.events.manager.EventManager;
 import com.teamE.imageDestinations.Destination;
 import com.teamE.imageDestinations.ImageDestination;
 import com.teamE.imageDestinations.ImageDestinationRepo;
-import com.teamE.rooms.RoomWithConfigurationProjection;
 import com.teamE.users.StudentHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
@@ -34,15 +29,14 @@ import java.util.*;
 @RequestMapping("events")
 public class EventsController extends UsersDemandingController {
 
-    private EventManager eventManager;
+
     private EventsRepo eventsRepo;
     private ImageDestinationRepo imageDestinationRepo;
     private EventValidator eventValidator;
     private EventResourceProcessor eventResourceProcessor;
 
     @Autowired
-    public EventsController(EventManager eventManager, EventsRepo eventsRepo, ImageDestinationRepo imageDestinationRepo, EventValidator eventValidator, EventResourceProcessor eventResourceProcessor) {
-        this.eventManager = eventManager;
+    public EventsController(EventsRepo eventsRepo, ImageDestinationRepo imageDestinationRepo, EventValidator eventValidator, EventResourceProcessor eventResourceProcessor) {
         this.eventsRepo = eventsRepo;
         this.imageDestinationRepo = imageDestinationRepo;
         this.eventValidator = eventValidator;
@@ -66,13 +60,12 @@ public class EventsController extends UsersDemandingController {
     public Iterable<EntityModel<Event>> getByScope(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
         Iterable<Event> events;
         if (scope.equals(Scope.DORMITORY)) {
-            events = eventManager.findByScopeAndStudentHouse(scope, studentHouse);
+            events = eventsRepo.findByScopeAndStudentHouse(scope, studentHouse);
         } else {
-            events = eventManager.findByScope(scope);
+            events = eventsRepo.findByScope(scope);
         }
         List<EntityModel<Event>> toReturn = new ArrayList<>();
-        for (Event e :
-                events) {
+        for (Event e : events) {
             toReturn.add(eventResourceProcessor.process(e));
         }
         return toReturn;
@@ -100,9 +93,9 @@ public class EventsController extends UsersDemandingController {
     public Iterable<EntityModel<Event>> getByScopeOrderByDateDesc(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
         Iterable<Event> events;
         if (scope.equals(Scope.DORMITORY)) {
-            events = eventManager.findByScopeAndStudentHouseOrderByDateDesc(scope, studentHouse);
+            events = eventsRepo.findByScopeAndStudentHouseOrderByDateDesc(scope, studentHouse);
         } else {
-            events = eventManager.findByScopeOrderByDateDesc(scope);
+            events = eventsRepo.findByScopeOrderByDateDesc(scope);
         }
         List<EntityModel<Event>> toReturn = new ArrayList<>();
         for (Event e :
@@ -110,11 +103,6 @@ public class EventsController extends UsersDemandingController {
             toReturn.add(eventResourceProcessor.process(e));
         }
         return toReturn;
-    }
-
-    @GetMapping("/address")
-    public Address getAddress() {
-        return new Address();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
