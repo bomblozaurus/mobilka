@@ -86,12 +86,16 @@ public class AdsController {
         Long mainImage = ad.getMainImage();
         List<Long> additionalImages = adPojo.getAdditionalImages();
 
-        Optional<ImageDestination> temp = imageDestinationRepo.findById(mainImage);
-        if (temp.isPresent()) {
-            ImageDestination imageDestination = temp.get();
-            imageDestination.setIdDestination(savedAd.getId());
-            imageDestination.setDestination(Destination.AD);
-            imageDestinationRepo.save(imageDestination);
+        Optional<ImageDestination> temp;
+
+        if (mainImage != null) {
+            temp = imageDestinationRepo.findById(mainImage);
+            if (temp.isPresent()) {
+                ImageDestination imageDestination = temp.get();
+                imageDestination.setIdDestination(savedAd.getId());
+                imageDestination.setDestination(Destination.AD);
+                imageDestinationRepo.save(imageDestination);
+            }
         }
 
         if (CollectionUtils.isNotEmpty(additionalImages)) {

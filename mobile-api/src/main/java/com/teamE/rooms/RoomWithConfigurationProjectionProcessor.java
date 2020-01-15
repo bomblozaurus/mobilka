@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -29,8 +30,14 @@ public class RoomWithConfigurationProjectionProcessor implements RepresentationM
                 ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
                         .getRequest();
 
-        model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
-                downloadMainImage(Objects.requireNonNull(model.getContent()).getMainImage(), request)).withRel("mainImage"));
+        Long mainImageId = Objects.requireNonNull(model.getContent()).getMainImage();
+        if (mainImageId != null) {
+            model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
+                    downloadMainImage(mainImageId, request)).withRel("mainImage"));
+        } else {
+            model.add(new Link("https://archive.org/download/no-photo-available/no-photo-available.png").withRel("mainImage"));
+        }
+
         return model;
     }
 

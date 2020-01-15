@@ -28,8 +28,10 @@ public class EventValidator implements Validator {
         ValidationUtils.rejectIfEmpty(errors, "name", "name.empty");
         Event event = (Event) o;
 
-        if (!imageDestinationRepo.existsByIdAndIdDestination(event.getMainImage(), -1L)) {
-            errors.rejectValue("mainImage", "This image not exists or is already used");
+        if (event.getMainImage() != null) {
+            if (!imageDestinationRepo.existsByIdAndIdDestination(event.getMainImage(), -1L)) {
+                errors.rejectValue("mainImage", "This image not exists or is already used");
+            }
         }
     }
 }

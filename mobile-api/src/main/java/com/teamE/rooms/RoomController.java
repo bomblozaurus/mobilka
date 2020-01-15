@@ -51,13 +51,16 @@ public class RoomController extends UsersDemandingController {
 
         Long mainImage = savedRoom.getMainImage();
 
-        Optional<ImageDestination> temp = imageDestinationRepo.findById(mainImage);
-        if (temp.isPresent()) {
-            ImageDestination imageDestination = temp.get();
-            imageDestination.setIdDestination(savedRoom.getId());
-            imageDestination.setDestination(Destination.ROOM);
-            imageDestinationRepo.save(imageDestination);
+        if (mainImage != null) {
+            Optional<ImageDestination> temp = imageDestinationRepo.findById(mainImage);
+            if (temp.isPresent()) {
+                ImageDestination imageDestination = temp.get();
+                imageDestination.setIdDestination(savedRoom.getId());
+                imageDestination.setDestination(Destination.ROOM);
+                imageDestinationRepo.save(imageDestination);
+            }
         }
+
         return savedRoom;
 
     }

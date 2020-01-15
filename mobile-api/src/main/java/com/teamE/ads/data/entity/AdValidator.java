@@ -33,8 +33,10 @@ public class AdValidator implements Validator {
         ValidationUtils.rejectIfEmpty(errors, "scope", "scope.empty");
         AdPOJO adPOJO = (AdPOJO) o;
 
-        if (!imageDestinationRepo.existsByIdAndIdDestination(adPOJO.getMainImage(), -1L)) {
-            errors.rejectValue("mainImage", "This image not exists or is already used");
+        if (adPOJO.getMainImage() != null) {
+            if (!imageDestinationRepo.existsByIdAndIdDestination(adPOJO.getMainImage(), -1L)) {
+                errors.rejectValue("mainImage", "This image not exists or is already used");
+            }
         }
 
         List<Long> additionalImages = adPOJO.getAdditionalImages();
