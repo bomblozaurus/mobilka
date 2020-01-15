@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -37,11 +38,16 @@ public class AdProcessor implements RepresentationModelProcessor<EntityModel<Ad>
 
         Long mainImageId = Objects.requireNonNull(model.getContent()).getMainImage();
 
-        model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
-                downloadMainImage(mainImageId, request)).withRel("mainImage"));
+        if (mainImageId != null) {
+            model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
+                    downloadMainImage(mainImageId, request)).withRel("mainImage"));
 
-        model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
-                downloadMainImage(mainImageId, request)).withRel("additionalImages"));
+            model.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FileController.class).
+                    downloadMainImage(mainImageId, request)).withRel("additionalImages"));
+        } else {
+            model.add(new Link("https://archive.org/download/no-photo-available/no-photo-available.png").withRel("mainImage"));
+            model.add(new Link("https://archive.org/download/no-photo-available/no-photo-available.png").withRel("additionalImages"));
+        }
 
         for (ImageDestination image :
                 imageDestinationRepo.findAllByIdDestinationAndDestination(Objects.requireNonNull(model.getContent()).getId(), Destination.AD)) {
