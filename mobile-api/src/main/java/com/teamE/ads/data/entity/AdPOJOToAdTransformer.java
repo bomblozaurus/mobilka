@@ -11,7 +11,7 @@ public class AdPOJOToAdTransformer implements Transformer<AdPOJO,Ad> {
                 .name(pojo.getName())
                 .price(pojo.getPrice())
                 .street(pojo.getStreet())
-                .houseNumber(pojo.hashCode())
+                .houseNumber(pojo.getHouseNumber())
                 .apartmentNumber(pojo.getApartmentNumber())
                 .city(pojo.getCity())
                 .zip(pojo.getZip())
