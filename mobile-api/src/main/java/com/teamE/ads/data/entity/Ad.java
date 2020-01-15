@@ -1,8 +1,6 @@
 package com.teamE.ads.data.entity;
 
-import com.teamE.commonAddsEvents.Address;
 import com.teamE.commonAddsEvents.Scope;
-import com.teamE.imageDestinations.ImageDestination;
 import com.teamE.users.StudentHouse;
 import lombok.*;
 
