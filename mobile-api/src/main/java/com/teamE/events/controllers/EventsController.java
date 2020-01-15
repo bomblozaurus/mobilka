@@ -56,21 +56,6 @@ public class EventsController extends UsersDemandingController {
         return page.map(e -> eventResourceProcessor.process(e));
     }
 
-    @GetMapping("/scope")
-    public Iterable<EntityModel<Event>> getByScope(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
-        Iterable<Event> events;
-        if (scope.equals(Scope.DORMITORY)) {
-            events = eventsRepo.findByScopeAndStudentHouse(scope, studentHouse);
-        } else {
-            events = eventsRepo.findByScope(scope);
-        }
-        List<EntityModel<Event>> toReturn = new ArrayList<>();
-        for (Event e : events) {
-            toReturn.add(eventResourceProcessor.process(e));
-        }
-        return toReturn;
-    }
-
     @PostMapping
     public Event addEvent(@RequestBody @Validated Event event) {
         Event savedEvent = eventsRepo.save(event);
@@ -87,22 +72,6 @@ public class EventsController extends UsersDemandingController {
         }
 
         return savedEvent;
-    }
-
-    @GetMapping("/scopeOrderDate")
-    public Iterable<EntityModel<Event>> getByScopeOrderByDateDesc(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
-        Iterable<Event> events;
-        if (scope.equals(Scope.DORMITORY)) {
-            events = eventsRepo.findByScopeAndStudentHouseOrderByDateDesc(scope, studentHouse);
-        } else {
-            events = eventsRepo.findByScopeOrderByDateDesc(scope);
-        }
-        List<EntityModel<Event>> toReturn = new ArrayList<>();
-        for (Event e :
-                events) {
-            toReturn.add(eventResourceProcessor.process(e));
-        }
-        return toReturn;
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -43,52 +43,10 @@ public class AdsController extends UsersDemandingController {
         this.adProcessor = adProcessor;
     }
 
-    @GetMapping("/all")
-    public Iterable<Ad> getAll() {
-        return adsRepo.findAll();
-    }
-
-    @GetMapping
-    public Optional<Ad> getById(@RequestParam Long index) {
-        return adsRepo.findById(index);
-    }
-
-
     public Page<EntityModel<Ad>> findForUser(final Pageable pageable, final String query) {
         //FIXME dodać scope
         Page<Ad> page = adsRepo.findAllByScopeAndStudentHouseAndQuery(null, getUserStudentHouse(), query, pageable);
         return page.map(e -> adProcessor.process(e));
-    }
-
-
-    @GetMapping("/scope")
-    public Iterable<EntityModel<Ad>> getByScope(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
-        Iterable<Ad> ads;
-        if (scope.equals(Scope.DORMITORY)) {
-            ads = adsRepo.findByScopeAndStudentHouse(scope, studentHouse);
-        } else {
-            ads = adsRepo.findByScope(scope);
-        }
-        List<EntityModel<Ad>> toReturn = new ArrayList<>();
-        for (Ad e : ads) {
-            toReturn.add(adProcessor.process(e));
-        }
-        return toReturn;
-    }
-
-    @GetMapping("/scopeOrderPriceDesc")
-    public Iterable<EntityModel<Ad>> getByScopeOrderByDateDesc(@RequestParam Scope scope, @RequestParam StudentHouse studentHouse) {
-        Iterable<Ad> ads;
-        if (scope.equals(Scope.DORMITORY)) {
-            ads = adsRepo.findByScopeAndStudentHouseOrderByPriceDesc(scope, studentHouse);
-        } else {
-            ads = adsRepo.findByScopeOrderByPriceDesc(scope);
-        }
-        List<EntityModel<Ad>> toReturn = new ArrayList<>();
-        for (Ad e : ads) {
-            toReturn.add(adProcessor.process(e));
-        }
-        return toReturn;
     }
 
     @PostMapping
