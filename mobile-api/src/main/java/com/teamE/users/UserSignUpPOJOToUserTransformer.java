@@ -8,11 +8,8 @@ import javax.transaction.Transactional;
 
 @Component
 public class UserSignUpPOJOToUserTransformer implements Transformer<UserSignUpPOJO, User> {
-
     @Autowired
-    UserRoleRepository userRoleRepository;
-
-
+    private UserRoleRepository userRoleRepository;
     @Override
     public User transform(UserSignUpPOJO pojo) {
 
@@ -20,7 +17,7 @@ public class UserSignUpPOJOToUserTransformer implements Transformer<UserSignUpPO
                 .email(pojo.getEmail())
                 .firstName(pojo.getFirstName())
                 .lastName(pojo.getLastName())
-                .userRole(createRoleIfNotFound("USER"))
+                .userRole(createRoleIfNotFound("KEYHOLDER"))
                 .password(pojo.getPassword())
                 .indexNumber(pojo.getIndexNumber())
                 .studentHouse(pojo.getStudentHouse())
