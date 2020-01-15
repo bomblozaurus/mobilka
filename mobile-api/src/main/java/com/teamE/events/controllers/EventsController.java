@@ -23,7 +23,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController()
 @RequestMapping("events")
@@ -37,6 +40,7 @@ public class EventsController extends UsersDemandingController {
 
     @Autowired
     public EventsController(EventsRepo eventsRepo, ImageDestinationRepo imageDestinationRepo, EventValidator eventValidator, EventResourceProcessor eventResourceProcessor) {
+        super();
         this.eventsRepo = eventsRepo;
         this.imageDestinationRepo = imageDestinationRepo;
         this.eventValidator = eventValidator;

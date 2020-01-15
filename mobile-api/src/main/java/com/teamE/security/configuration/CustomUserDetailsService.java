@@ -1,5 +1,7 @@
 package com.teamE.security.configuration;
 
+import com.teamE.users.User;
+import com.teamE.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,11 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.teamE.users.User;
-import com.teamE.users.UserRepository;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -39,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private Collection<GrantedAuthority> getAuthorities(User user) {
-        return user.getUserRoles().stream().map(role -> new SimpleGrantedAuthority(role.getType().name())).collect(Collectors.toList());
+        return Arrays.asList(new SimpleGrantedAuthority(user.getUserRole().getType().name()));
     }
 
 }

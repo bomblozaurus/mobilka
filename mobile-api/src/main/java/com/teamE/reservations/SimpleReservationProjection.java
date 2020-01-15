@@ -9,12 +9,6 @@ import java.time.LocalDateTime;
 
 @Projection(name = "simple", types = Reservation.class)
 public interface SimpleReservationProjection {
-    @Value("#{target.getRoom().getId()}")
-    long getRoomId();
-
-    @Value("#{target.getRoom().getName()}")
-    String getRoomName();
-
     LocalDateTime getDateTime();
 
     Duration getDuration();
@@ -23,9 +17,17 @@ public interface SimpleReservationProjection {
 
     int getNumberOfPeople();
 
+    long getId();
+
     @Value("#{target.getUser().getId()}")
     long getUserId();
 
     @Value("#{target.getPrice()}")
     BigDecimal getPrice();
+
+    @Value("#{target.getRoom().getId()}")
+    long getRoomId();
+
+    @Value("#{target.getRoom().getName()}")
+    String getRoomName();
 }
