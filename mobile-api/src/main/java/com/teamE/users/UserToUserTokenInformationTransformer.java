@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 public class UserToUserTokenInformationTransformer implements Transformer<User, UserTokenInformation> {
     @Override
     public UserTokenInformation transform(User user) {
-        List<String> roles = user.getUserRoles().stream().map(Object::toString).collect(Collectors.toList());
+        UserRole role = user.getUserRole();
         return UserTokenInformation.builder()
                 .email(user.getEmail())
                 .name(user.getFirstName() + " " + user.getLastName())
-                .role(StringUtils.join(roles, ','))
+                .role(role.toString())
                 .build();
     }
 }
