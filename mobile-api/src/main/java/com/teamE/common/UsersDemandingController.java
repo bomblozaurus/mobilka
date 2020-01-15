@@ -1,20 +1,17 @@
 package com.teamE.common;
 
-import com.teamE.users.StudentHouse;
-import com.teamE.users.User;
-import com.teamE.users.UserRepository;
+import com.teamE.users.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+
+import java.util.Objects;
 
 @Controller
 public class UsersDemandingController {
 
     @Autowired
     private UserRepository userRepository;
-
-    public UsersDemandingController() {
-    }
 
     public StudentHouse getUserStudentHouse() {
         return this.getUser().getStudentHouse();
@@ -30,5 +27,9 @@ public class UsersDemandingController {
 
     public long getUserId() {
         return this.getUser().getId();
+    }
+
+    public boolean isUserKeyholder() {
+        return this.getUser().getUserRoles().stream().map(UserRole::getType).anyMatch(role -> Objects.equals(role, UserRoleType.KEYHOLDER));
     }
 }
