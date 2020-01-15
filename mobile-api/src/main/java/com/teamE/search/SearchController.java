@@ -1,5 +1,7 @@
 package com.teamE.search;
 
+import com.teamE.ads.controllers.AdsController;
+import com.teamE.ads.data.entity.Ad;
 import com.teamE.events.controllers.EventsController;
 import com.teamE.events.data.entity.Event;
 import com.teamE.rooms.RoomController;
@@ -19,11 +21,13 @@ public class SearchController {
 
     private RoomController roomController;
     private EventsController eventsController;
+    private AdsController adsController;
 
     @Autowired
-    public SearchController(RoomController roomController, EventsController eventsController) {
+    public SearchController(RoomController roomController, EventsController eventsController, AdsController adsController) {
         this.roomController = roomController;
         this.eventsController = eventsController;
+        this.adsController = adsController;
     }
 
     @GetMapping("rooms")
@@ -34,5 +38,10 @@ public class SearchController {
     @GetMapping("events")
     public Page<EntityModel<Event>> findAvailableEvents(final Pageable pageable, @RequestParam("query") final String query){
         return eventsController.findForUser(pageable, query);
+    }
+
+    @GetMapping("ads")
+    public Page<EntityModel<Ad>> findAvailableAds(final Pageable pageable, @RequestParam("query") final String query){
+        return adsController.findForUser(pageable, query);
     }
 }
