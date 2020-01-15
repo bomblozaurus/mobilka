@@ -57,5 +57,11 @@ public class Reservation {
         }
         return intervalCount;
     }
+
+    public boolean switchAccepted() {
+        this.accepted = !this.accepted;
+        return accepted;
+    }
+
 }
 

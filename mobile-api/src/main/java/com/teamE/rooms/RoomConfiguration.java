@@ -41,7 +41,7 @@ public class RoomConfiguration {
             .openFrom(LocalTime.of(12, 0))
             .openTo(LocalTime.of(22, 0))
             .rentInterval(Duration.ofMinutes(15))
-            .pricePerInterval(null)
+            .pricePerInterval(new BigDecimal(1.20))
             .build();
 
     private BigDecimal pricePerInterval;

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface EventsRepo extends JpaRepository<Event, Long> {
     Iterable<Event> findByScopeAndStudentHouse(Scope scope, StudentHouse studentHouse);
@@ -23,4 +25,6 @@ public interface EventsRepo extends JpaRepository<Event, Long> {
     Iterable<Event> findByScopeAndStudentHouseOrderByDateDesc(Scope scope, StudentHouse studentHouse);
 
     Iterable<Event> findByScopeOrderByDateDesc(Scope scope);
+
+    Iterable<Event> findAllById(Long id);
 }
