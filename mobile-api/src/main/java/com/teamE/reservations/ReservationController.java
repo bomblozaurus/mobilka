@@ -103,7 +103,7 @@ public class ReservationController extends UsersDemandingController {
             for(int j=0;j<availabilityFutureHours.length;j++)
             {
                 if(availabilityFutureHours[j])
-                    durations.add(room.getConfiguration().getRentInterval().multipliedBy(j));
+                    durations.add(room.getConfiguration().getRentInterval().multipliedBy(j+1));
                 else
                     break;
             }
