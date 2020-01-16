@@ -29,6 +29,7 @@ public class JwtUtil implements Serializable {
     private static final String DEVICE_KEY = "device";
     private static final String ROLE_KEY = "role";
     private static final String NAME_KEY = "name";
+    private static final String SCOPE_KEY = "scope";
     private static final String ENCRYPTION = "RSA";
 
     private PrivateKey privateKey;
@@ -102,6 +103,7 @@ public class JwtUtil implements Serializable {
         claims.put(DEVICE_KEY, deviceInformation);
         claims.put(NAME_KEY, userTokenInformation.getName());
         claims.put(ROLE_KEY, userTokenInformation.getRole());
+        claims.put(SCOPE_KEY, userTokenInformation.getScope());
 
         Date now = new Date();
 

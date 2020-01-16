@@ -12,6 +12,7 @@ public class UserToUserTokenInformationTransformer implements Transformer<User, 
                 .email(user.getEmail())
                 .name(user.getFirstName() + " " + user.getLastName())
                 .role(role.getType().name())
+                .scope(user.getScope())
                 .build();
     }
 }

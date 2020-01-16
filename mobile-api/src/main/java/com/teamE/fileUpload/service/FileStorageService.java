@@ -51,13 +51,16 @@ public class FileStorageService {
 
         try {
             // Check if the file's name contains invalid characters
-            if(fileName.contains("..")) {
+            if (fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
             String extension = FilenameUtils.getExtension(fileName);
+            if (extension.isBlank()) {
+                extension = ".jpg";
+            }
             ImageDestination imageProduct = imageDestinationRepo.save(new ImageDestination(extension));
-            String localFileName = imageProduct.getId().toString()+"."+extension;
+            String localFileName = imageProduct.getId().toString() + "." + extension;
 
             // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = this.fileStorageLocation.resolve(localFileName);
