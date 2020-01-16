@@ -16,4 +16,5 @@ public class ReservationPOJO {
     private int numberOfPeople;
 
     private int roomId;
+
 }

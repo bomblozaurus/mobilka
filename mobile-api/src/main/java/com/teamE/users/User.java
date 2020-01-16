@@ -8,7 +8,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.Set;
 
 @AllArgsConstructor
 @Data
@@ -16,14 +15,13 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
-    @Singular
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    Set<UserRole> userRoles;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ROLE_ID")
+    UserRole userRole;
     Integer indexNumber;
     Scope scope;
+
     @Enumerated(EnumType.STRING)
     StudentHouse studentHouse;
     @Id
