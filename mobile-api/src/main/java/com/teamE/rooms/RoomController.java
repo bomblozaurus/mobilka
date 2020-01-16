@@ -26,15 +26,17 @@ public class RoomController extends UsersDemandingController {
     private RoomPOJOToRoomTransformer roomPOJOToRoomTransformer;
     private RoomPOJOValidator roomPOJOValidator;
     private ImageDestinationRepo imageDestinationRepo;
+    private RoomSearcher roomSearcher;
 
     @Autowired
-    public RoomController(RoomRepository roomRepository, RoomWithConfigurationProjectionProcessor roomWithConfigurationProjectionProcessor, RoomPOJOToRoomTransformer roomPOJOToRoomTransformer, RoomPOJOValidator roomPOJOValidator, ImageDestinationRepo imageDestinationRepo) {
+    public RoomController(RoomRepository roomRepository, RoomWithConfigurationProjectionProcessor roomWithConfigurationProjectionProcessor, RoomPOJOToRoomTransformer roomPOJOToRoomTransformer, RoomPOJOValidator roomPOJOValidator, ImageDestinationRepo imageDestinationRepo, RoomSearcher roomSearcher) {
         super();
         this.roomRepository = roomRepository;
         this.roomWithConfigurationProjectionProcessor = roomWithConfigurationProjectionProcessor;
         this.roomPOJOToRoomTransformer = roomPOJOToRoomTransformer;
         this.roomPOJOValidator = roomPOJOValidator;
         this.imageDestinationRepo = imageDestinationRepo;
+        this.roomSearcher = roomSearcher;
     }
 
     @GetMapping("available")
@@ -62,11 +64,10 @@ public class RoomController extends UsersDemandingController {
         }
 
         return savedRoom;
-
     }
 
     public Page<EntityModel<RoomWithConfigurationProjection>> findForUser(final Pageable pageable, final String query) {
-        Page<RoomWithConfigurationProjection> page = roomRepository.getAllByDsNumberAndQuery(getUserStudentHouseId(), query, pageable);
+        Page<RoomWithConfigurationProjection> page = roomSearcher.searchRoom(getUserStudentHouseId() ,query,pageable);
         return page.map(e -> roomWithConfigurationProjectionProcessor.process(e));
     }
 
