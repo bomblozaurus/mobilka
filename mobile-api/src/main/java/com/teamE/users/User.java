@@ -4,7 +4,6 @@ import com.teamE.commonAddsEvents.Scope;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -21,7 +20,6 @@ public class User implements Serializable {
     UserRole userRole;
     Integer indexNumber;
     Scope scope;
-
     @Enumerated(EnumType.STRING)
     StudentHouse studentHouse;
     @Id
