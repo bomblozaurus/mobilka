@@ -1,8 +1,10 @@
 package com.teamE.users;
 
+import com.teamE.commonAddsEvents.Scope;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
@@ -20,7 +22,8 @@ public class User implements Serializable {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     Set<UserRole> userRoles;
-    int indexNumber;
+    Integer indexNumber;
+    Scope scope;
     @Enumerated(EnumType.STRING)
     StudentHouse studentHouse;
     @Id

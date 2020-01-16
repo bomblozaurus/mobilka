@@ -1,5 +1,6 @@
 package com.teamE.common;
 
+import com.teamE.commonAddsEvents.Scope;
 import com.teamE.users.StudentHouse;
 import com.teamE.users.User;
 import com.teamE.users.UserRepository;
@@ -18,6 +19,10 @@ public class UsersDemandingController {
 
     public StudentHouse getUserStudentHouse() {
         return this.getUser().getStudentHouse();
+    }
+
+    public Scope getUserScope() {
+        return this.getUser().getScope();
     }
 
     public User getUser() {

@@ -6,8 +6,10 @@ import com.teamE.users.StudentHouse;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.TermVector;
+import org.hibernate.search.bridge.builtin.EnumBridge;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
@@ -34,7 +36,9 @@ public class Event {
     @Field(termVector = TermVector.YES)
     private String description;
     private Long mainImage;
+    @Field(bridge=@FieldBridge(impl= EnumBridge.class))
     private Scope scope;
+    @Field(bridge=@FieldBridge(impl= EnumBridge.class))
     @Enumerated(EnumType.STRING)
     private StudentHouse studentHouse;
 }

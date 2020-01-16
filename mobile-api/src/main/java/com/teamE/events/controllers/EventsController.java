@@ -57,15 +57,17 @@ public class EventsController extends UsersDemandingController {
         return page.map(e -> eventResourceProcessor.process(e));
     }
 
-    public Page<EntityModel<Event>> findForUser(final Pageable pageable, final String query) {
-        //FIXME dodać scope
-        Page<Event> page = eventsRepo.findAllByScopeAndStudentHouseAndQuery(null, getUserStudentHouse(), query, pageable);
-        return page.map(e -> eventResourceProcessor.process(e));
-    }
 
-    @GetMapping("szukaj")
-    public List<Event> findAvailableAds(final Pageable pageable, @RequestParam("query") final String query){
-        return eventSearcher.searchEvent(query);
+    public Page<EntityModel<Event>> findForUser(final Pageable pageable, final String query){
+        Scope scope = getUserScope();
+        StudentHouse studentHouse;
+        if (scope != Scope.DORMITORY) {
+            studentHouse = null;
+        } else {
+            studentHouse = getUserStudentHouse();
+        }
+        Page<Event> page = eventSearcher.searchEvent(scope, studentHouse,query,pageable);
+        return page.map(e -> eventResourceProcessor.process(e));
     }
 
     @PostMapping
