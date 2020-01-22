@@ -17,12 +17,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/ads")
@@ -50,7 +53,7 @@ public class AdsController extends UsersDemandingController {
     }
 
     @PostMapping
-    public Ad addAd(@RequestBody @Validated AdPOJO adPojo) {
+    public ResponseEntity<Ad> addAd(@RequestBody @Validated AdPOJO adPojo) {
         Ad ad = adPOJOToAdTransformer.transform(adPojo);
         Ad savedAd = adsRepo.save(ad);
 
@@ -80,7 +83,7 @@ public class AdsController extends UsersDemandingController {
                 }
             }
         }
-        return savedAd;
+        return new ResponseEntity(savedAd, HttpStatus.CREATED);
     }
 
     @InitBinder

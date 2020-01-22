@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Data
 @Table(name = "image_destination")
 public class ImageDestination {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     private Long idDestination;

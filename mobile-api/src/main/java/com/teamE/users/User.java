@@ -23,7 +23,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     StudentHouse studentHouse;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @NonNull
     private String password;
