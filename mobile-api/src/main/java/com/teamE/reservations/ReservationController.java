@@ -131,6 +131,7 @@ public class ReservationController extends UsersDemandingController {
                 else
                     break;
             }
+            if(durations.size()>0)
             map.put(current, durations);
         }
         return new TreeMap<>(map);
