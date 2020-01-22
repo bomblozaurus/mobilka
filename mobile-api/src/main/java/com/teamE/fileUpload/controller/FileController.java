@@ -51,9 +51,14 @@ public class FileController {
         return fileStorageService.storeFile(file);
     }
 
-    //NIEZALECANA (rozwaz uzycie /uploadImage)
-    //nie wiem dlaczego ale jak sie nie da praamtru files to w prawdzie nie dodoa zadnych plikow
-    //ale zwroci 200 jakby wszystko bylo dobrze
+    /**
+     *  NIEZALECANA (rozwaz uzycie /uploadImage)
+     *  nie wiem dlaczego ale jak sie nie da parametru files to w prawdzie nie dodoa zadnych plikow
+     *  ale zwroci 200 jakby wszystko bylo dobrze
+     * @param files
+     * @return
+     */
+
     @PostMapping("/uploadMultipleImages")
     public List<ImageDestination> uploadMultipleFiles(@RequestParam(name="files") MultipartFile[] files) {
         return Arrays.stream(files)

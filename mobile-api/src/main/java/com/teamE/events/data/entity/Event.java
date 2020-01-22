@@ -20,7 +20,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Indexed
 public class Event {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     @Field(termVector = TermVector.YES)
