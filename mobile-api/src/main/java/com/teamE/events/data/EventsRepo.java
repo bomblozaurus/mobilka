@@ -23,12 +23,10 @@ public interface EventsRepo extends JpaRepository<Event, Long> {
         return this.findAllByScopeAndStudentHouseAndNameContainingIgnoreCaseOrStreetContainingIgnoreCaseOrCityContainingIgnoreCase(scope, studentHouse, query, query, query, pageable);
     }
 
-
     Page<Event> findAllByScopeAndStudentHouseAndNameContainingIgnoreCaseOrStreetContainingIgnoreCaseOrCityContainingIgnoreCase(Scope scope, StudentHouse studentHouse, String name, String street, String city, Pageable pageable);
-  //  @Query("select e from Event e where (e.scope = ?1 or e.scope = ?4 or e.scope = ?5) and e.studentHouse in (?2,null) and (LOWER(e.name) LIKE LOWER(concat(?3, '%')) or LOWER(e.description) LIKE LOWER(concat(?3, '%')) or LOWER(e.street) LIKE LOWER(concat(?3, '%')) or LOWER(e.city) LIKE LOWER(concat(?3, '%')))")
 
     @Query("select e from Event e where e.scope >= ?1 and (e.studentHouse = ?2 or (e.studentHouse is null)) and (LOWER(e.name) LIKE LOWER(concat(?3, '%')) or LOWER(e.description) LIKE LOWER(concat(?3, '%')) or LOWER(e.street) LIKE LOWER(concat(?3, '%')) or LOWER(e.city) LIKE LOWER(concat(?3, '%')))")
-    Page<Event> search(Scope scope, StudentHouse studentHouse, String query, Scope scope2, Scope scope3,Pageable pageable);
+    Page<Event> search(Scope scope, StudentHouse studentHouse, String query,Pageable pageable);
 
 
     Iterable<Event> findByScope(Scope scope);
