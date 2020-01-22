@@ -30,45 +30,17 @@ public class EventSearcher {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Page<Event> searchEvent(Scope scope, StudentHouse studentHouse, String query, Pageable page) {
-
-        Query keywordQuery;
+    public Page<Event> searchEvent(Scope scope, StudentHouse studentHouse, String textToSearch, Pageable page) {
+/*        MustJunction mustJunction = getQueryBuilder().bool().must(checkScope(scope));*/
         QueryBuilder queryBuilder = getQueryBuilder();
+        MustJunction mustJunction = queryBuilder.bool().must(checkStudenHouse(studentHouse,queryBuilder));
 
-        BooleanJunction<BooleanJunction> booleanJunctionBooleanJunction = queryBuilder
-                .bool();
-
-        List<Query> queries = new ArrayList<>();
-
-        String text = query.trim();
+/*        String text = textToSearch.trim();
         if (text.length() > 0) {
-            queries.add(checkQuery(text));
-        }
+            mustJunction = mustJunction.must(checkQuery(text));
+        }*/
 
-
-        MustJunction mustJunction = queryBuilder
-                .bool()
-                .must(checkQuery(query))
-                .must(queryBuilder.keyword()
-                        .onField("scope")
-                        .matching(scope)
-                        .createQuery());
-
-        if (scope != Scope.DORMITORY) {
-            keywordQuery = mustJunction.must(queryBuilder.keyword()
-                    .onField("scope")
-                    .matching(scope)
-                    .createQuery()).createQuery();
-        }
-
-        if (studentHouse != null) {
-            keywordQuery = mustJunction.must(queryBuilder.keyword()
-                    .onField("studentHouse")
-                    .matching(studentHouse)
-                    .createQuery()).createQuery();
-        } else {
-            keywordQuery = mustJunction.createQuery();
-        }
+        Query keywordQuery = mustJunction.createQuery();
 
         List<Event> events = getJpaQuery(keywordQuery, page).getResultList();
 
@@ -79,10 +51,8 @@ public class EventSearcher {
 
     Query checkQuery(String query) {
         QueryBuilder queryBuilder = getQueryBuilder();
-        return queryBuilder
-                .bool()
-                .must(queryBuilder
-                        .bool().should(queryBuilder.phrase()
+        return queryBuilder.bool()
+                        .should(queryBuilder.phrase()
                                 .withSlop(1).onField("name")
                                 .sentence(query).createQuery())
                         .should(queryBuilder.phrase()
@@ -93,7 +63,7 @@ public class EventSearcher {
                                 .sentence(query).createQuery())
                         .should(queryBuilder.phrase()
                                 .withSlop(1).onField("city")
-                                .sentence(query).createQuery()).createQuery()).createQuery();
+                                .sentence(query).createQuery()).createQuery();
     }
 
     Query checkScope(Scope scope) {
@@ -131,6 +101,17 @@ public class EventSearcher {
                         .createQuery()).createQuery();
     }
 
+    Query checkStudenHouse(StudentHouse studentHouse, QueryBuilder queryBuilder) {
+        return queryBuilder
+                .bool().must(queryBuilder.bool()
+                        .should(queryBuilder.keyword()
+                                .onField("studentHouse")
+                                .matching(studentHouse).createQuery())
+                        .should(queryBuilder.keyword()
+                                .onField("studentHouse")
+                                .matching(null).createQuery())
+                        .createQuery()).createQuery();
+    }
 
     private FullTextQuery getJpaQuery(org.apache.lucene.search.Query luceneQuery, Pageable page) {
 
