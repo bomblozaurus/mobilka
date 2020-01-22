@@ -57,7 +57,7 @@ public class FileStorageService {
 
             String extension = FilenameUtils.getExtension(fileName);
             if (extension.isBlank()) {
-                extension = ".jpg";
+                extension = "jpg";
             }
             ImageDestination imageProduct = imageDestinationRepo.save(new ImageDestination(extension));
             String localFileName = imageProduct.getId().toString() + "." + extension;
