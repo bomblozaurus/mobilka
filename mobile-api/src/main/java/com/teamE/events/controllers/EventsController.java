@@ -63,14 +63,15 @@ public class EventsController extends UsersDemandingController {
 
 
     public Page<EntityModel<Event>> findForUser(final Pageable pageable, final String query){
-        Scope scope = getUserScope();
+     /*   Scope scope = getUserScope();
         StudentHouse studentHouse;
         if (scope != Scope.DORMITORY) {
             studentHouse = null;
         } else {
             studentHouse = getUserStudentHouse();
-        }
-        Page<Event> page = eventSearcher.searchEvent(scope, studentHouse,query,pageable);
+        }*/
+       /* Page<Event> page = eventsRepo.findAllByScopeAndStudentHouseAndQuery(getUserScope(), getUserStudentHouse(), query, pageable);*/
+        Page<Event> page = eventsRepo.search(getUserScope(), getUserStudentHouse(), query, pageable);
         return page.map(e -> eventResourceProcessor.process(e));
     }
 
