@@ -142,9 +142,13 @@ public class ReservationController extends UsersDemandingController {
         Optional<Reservation> optionalReservation = reservationRepo.findById(id);
         if (optionalReservation.isPresent()) {
             Reservation reservation = optionalReservation.get();
-            if (reservation.getDateTime().isBefore(LocalDateTime.now())) {
-                reservationRepo
+            if (reservation.getDateTime().isAfter(LocalDateTime.now()) && (reservation.getUser().equals(getUser()) || reservation.getRoom().getKeyholder().equals(getUser()))) {
+                reservationRepo.deleteById(id);
+                return true;
+            } else {
+                return false;
             }
         }
+        return true;
     }
 }
