@@ -25,6 +25,10 @@ public interface EventsRepo extends JpaRepository<Event, Long> {
 
     Page<Event> findAllByScopeAndStudentHouseAndNameContainingIgnoreCaseOrStreetContainingIgnoreCaseOrCityContainingIgnoreCase(Scope scope, StudentHouse studentHouse, String name, String street, String city, Pageable pageable);
 
+    @Query("select e from Event e where e.scope >= ?1 and (e.studentHouse = ?2 or (e.studentHouse is null)) and (LOWER(e.name) LIKE LOWER(concat(?3, '%')) or LOWER(e.description) LIKE LOWER(concat(?3, '%')) or LOWER(e.street) LIKE LOWER(concat(?3, '%')) or LOWER(e.city) LIKE LOWER(concat(?3, '%')))")
+    Page<Event> search(Scope scope, StudentHouse studentHouse, String query,Pageable pageable);
+
+
     Iterable<Event> findByScope(Scope scope);
 
     Iterable<Event> findByScopeAndStudentHouseOrderByDateDesc(Scope scope, StudentHouse studentHouse);
