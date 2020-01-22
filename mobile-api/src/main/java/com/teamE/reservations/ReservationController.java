@@ -126,12 +126,13 @@ public class ReservationController extends UsersDemandingController {
             }
             for (int j = 0; j < availabilityFutureHours.length; j++) {
                 if (availabilityFutureHours[j])
-                    durations.add(room.getConfiguration().getRentInterval().multipliedBy(j+1));
+                    durations.add(room.getConfiguration().getRentInterval().multipliedBy(j + 1));
 
                 else
                     break;
             }
-            map.put(current, durations);
+            if (durations.size() > 0)
+                map.put(current, durations);
         }
         return new TreeMap<>(map);
     }
