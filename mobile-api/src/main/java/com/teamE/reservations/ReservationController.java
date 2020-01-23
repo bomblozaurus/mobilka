@@ -83,7 +83,9 @@ public class ReservationController extends UsersDemandingController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("To modify the room you must be its keyholder!");
         }
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(Boolean.valueOf(reservation.switchAccepted()).toString());
+        reservation.switchAccepted();
+        reservation = reservationRepo.save(reservation);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(Boolean.valueOf(reservation.isAccepted()).toString());
     }
 
 
