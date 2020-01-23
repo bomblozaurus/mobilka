@@ -136,4 +136,19 @@ public class ReservationController extends UsersDemandingController {
         }
         return new TreeMap<>(map);
     }
+
+    @DeleteMapping
+    Boolean deleteReservation(@RequestParam long id) {
+        Optional<Reservation> optionalReservation = reservationRepo.findById(id);
+        if (optionalReservation.isPresent()) {
+            Reservation reservation = optionalReservation.get();
+            if (reservation.getDateTime().isAfter(LocalDateTime.now()) && (reservation.getUser().equals(getUser()) || reservation.getRoom().getKeyholder().equals(getUser()))) {
+                reservationRepo.deleteById(id);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
 }
