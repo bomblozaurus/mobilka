@@ -26,6 +26,8 @@ public class Room {
     @Column(nullable = false)
     private String name;
 
+    @Lob
+    @Column
     private String description;
 
     @OneToOne

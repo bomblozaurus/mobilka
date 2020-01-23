@@ -32,6 +32,8 @@ public class Event {
     @Field(termVector = TermVector.YES)
     private String city;
     private String zip;
+    @Lob
+    @Column
     @Field(termVector = TermVector.YES)
     private String description;
     private Long mainImage;
