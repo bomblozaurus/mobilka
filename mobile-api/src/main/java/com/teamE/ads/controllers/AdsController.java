@@ -47,8 +47,7 @@ public class AdsController extends UsersDemandingController {
     }
 
     public Page<EntityModel<Ad>> findForUser(final Pageable pageable, final String query) {
-        //FIXME dodać scope
-        Page<Ad> page = adsRepo.findAllByScopeAndStudentHouseAndQuery(null, getUserStudentHouse(), query, pageable);
+        Page<Ad> page = adsRepo.search(getUserScope(), getUserStudentHouse(), query, pageable);
         return page.map(e -> adProcessor.process(e));
     }
 

@@ -66,7 +66,7 @@ public class RoomController extends UsersDemandingController {
     }
 
     public Page<EntityModel<RoomWithConfigurationProjection>> findForUser(final Pageable pageable, final String query) {
-        Page<RoomWithConfigurationProjection> page = roomRepository.getAllByDsNumberAndQuery(getUserStudentHouseId(), query, pageable);
+        Page<RoomWithConfigurationProjection> page = roomRepository.search(getUserStudentHouseId(), query, pageable);
         return page.map(e -> roomWithConfigurationProjectionProcessor.process(e));
     }
 
