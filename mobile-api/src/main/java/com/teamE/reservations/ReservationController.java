@@ -133,7 +133,7 @@ public class ReservationController extends UsersDemandingController {
                 else
                     break;
             }
-            if (durations.size() > 0)
+            if (durations.size() > 0 && current.isAfter(LocalTime.now()))
                 map.put(current, durations);
         }
         return new TreeMap<>(map);
