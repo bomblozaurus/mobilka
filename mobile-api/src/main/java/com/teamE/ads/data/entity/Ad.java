@@ -23,6 +23,8 @@ public class Ad {
     private int apartmentNumber;
     private String city;
     private String zip;
+    @Lob
+    @Column
     private String description;
     private Long mainImage;
     private Scope scope;
