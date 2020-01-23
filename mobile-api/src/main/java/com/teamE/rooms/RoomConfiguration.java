@@ -19,11 +19,15 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "room_configuration")
-@SequenceGenerator(name = "roomIdGenerator")
 public class RoomConfiguration {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roomSequenceGenerator")
-    private Long id;
+    private final static RoomConfiguration defaultConfiguration = RoomConfiguration.builder()
+            .id(1L)
+            .name("DEFAULT")
+            .openFrom(LocalTime.of(12, 0))
+            .openTo(LocalTime.of(22, 0))
+            .rentInterval(Duration.ofMinutes(15))
+            .pricePerInterval(new BigDecimal("1.20"))
+            .build();
 
     @NotNull
     @Size(max = 100)
@@ -34,15 +38,9 @@ public class RoomConfiguration {
 
     @NotNull
     private LocalTime openTo;
-
-    private final static RoomConfiguration defaultConfiguration = RoomConfiguration.builder()
-            .id(1L)
-            .name("DEFAULT")
-            .openFrom(LocalTime.of(12, 0))
-            .openTo(LocalTime.of(22, 0))
-            .rentInterval(Duration.ofMinutes(15))
-            .pricePerInterval(new BigDecimal(1.20))
-            .build();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private BigDecimal pricePerInterval;
     @NotNull

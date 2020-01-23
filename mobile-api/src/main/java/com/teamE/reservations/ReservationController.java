@@ -83,7 +83,9 @@ public class ReservationController extends UsersDemandingController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("To modify the room you must be its keyholder!");
         }
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(Boolean.valueOf(reservation.switchAccepted()).toString());
+        reservation.switchAccepted();
+        reservation = reservationRepo.save(reservation);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(Boolean.valueOf(reservation.isAccepted()).toString());
     }
 
 
@@ -126,13 +128,13 @@ public class ReservationController extends UsersDemandingController {
             }
             for (int j = 0; j < availabilityFutureHours.length; j++) {
                 if (availabilityFutureHours[j])
-                    durations.add(room.getConfiguration().getRentInterval().multipliedBy(j+1));
+                    durations.add(room.getConfiguration().getRentInterval().multipliedBy(j + 1));
 
                 else
                     break;
             }
-            if(durations.size()>0)
-            map.put(current, durations);
+            if (durations.size() > 0)
+                map.put(current, durations);
         }
         return new TreeMap<>(map);
     }
