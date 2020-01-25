@@ -46,6 +46,7 @@ public class ReservationController extends UsersDemandingController {
         Reservation reservation = reservationPOJOToReservationTransformer.transform(pojo);
         if (new ReservationValidator(reservationRepo).validate(reservation)) {
             reservation.setUser(getUser());
+            reservation.setCreationDate(LocalDateTime.now());
             return reservationRepo.save(reservation);
         } else
             return reservation;

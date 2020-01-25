@@ -23,6 +23,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,6 +55,8 @@ public class AdsController extends UsersDemandingController {
     @PostMapping
     public ResponseEntity<Ad> addAd(@RequestBody @Validated AdPOJO adPojo) {
         Ad ad = adPOJOToAdTransformer.transform(adPojo);
+        ad.setUserID(getUserId());
+        ad.setDate(LocalDateTime.now());
         Ad savedAd = adsRepo.save(ad);
 
         Long mainImage = ad.getMainImage();

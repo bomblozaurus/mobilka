@@ -2,10 +2,14 @@ package com.teamE.ads.data.entity;
 
 import com.teamE.commonAddsEvents.Scope;
 import com.teamE.users.StudentHouse;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -21,6 +25,8 @@ public class Ad {
     private String street;
     private int houseNumber;
     private int apartmentNumber;
+    private LocalDateTime date;
+    private Long userID;
     private String city;
     private String zip;
     @Lob

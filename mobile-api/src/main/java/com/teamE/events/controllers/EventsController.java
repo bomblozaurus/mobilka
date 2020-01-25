@@ -1,6 +1,5 @@
 package com.teamE.events.controllers;
 
-import com.teamE.ads.data.entity.Ad;
 import com.teamE.common.UsersDemandingController;
 import com.teamE.common.ValidationHandler;
 import com.teamE.commonAddsEvents.Scope;
@@ -15,9 +14,6 @@ import com.teamE.imageDestinations.Destination;
 import com.teamE.imageDestinations.ImageDestination;
 import com.teamE.imageDestinations.ImageDestinationRepo;
 import com.teamE.users.StudentHouse;
-import org.apache.lucene.queryparser.flexible.core.builders.QueryBuilder;
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,8 +24,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
@@ -69,7 +64,10 @@ public class EventsController extends UsersDemandingController {
 
     @PostMapping
     public Event addEvent(@RequestBody @Validated Event event) {
+        event.setUserID(getUserId());
+        event.setCreationDate(LocalDateTime.now());
         Event savedEvent = eventsRepo.save(event);
+
 
         Long mainImage = savedEvent.getMainImage();
 

@@ -12,6 +12,7 @@ import org.hibernate.search.annotations.TermVector;
 import org.hibernate.search.bridge.builtin.EnumBridge;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -32,6 +33,8 @@ public class Event {
     @Field(termVector = TermVector.YES)
     private String city;
     private String zip;
+    private LocalDateTime creationDate;
+    private Long userID;
     @Lob
     @Column
     @Field(termVector = TermVector.YES)

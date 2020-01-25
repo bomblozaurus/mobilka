@@ -41,6 +41,8 @@ public class Reservation {
 
     private boolean accepted;
 
+    private LocalDateTime creationDate;
+
     public BigDecimal getPrice() {
         Duration interval = this.getRoom().getConfiguration().getRentInterval();
 
