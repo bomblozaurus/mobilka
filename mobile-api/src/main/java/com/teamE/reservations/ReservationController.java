@@ -135,14 +135,14 @@ public class ReservationController extends UsersDemandingController {
                     break;
             }
               if (durations.size() > 0) {
-                if (ld.isAfter(LocalDate.now())) {
+                  if (ld.isEqual(LocalDate.now()) && current.isAfter(LocalTime.now())) {
+                      map.put(current, durations);
+                  } else if (ld.isAfter(LocalDate.now())) {
                     map.put(current, durations);
-                    break;
-                }
-                if (ld.isEqual(LocalDate.now()) && current.isAfter(LocalTime.now())) {
-                    map.put(current, durations);
-                }
-            }
+
+                  }
+
+              }
         }
         return new TreeMap<>(map);
     }
