@@ -5,13 +5,13 @@ import com.teamE.commonAddsEvents.Scope;
 import com.teamE.users.StudentHouse;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.FieldBridge;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.TermVector;
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
+import org.hibernate.search.annotations.*;
 import org.hibernate.search.bridge.builtin.EnumBridge;
 
 import javax.persistence.*;
+import javax.persistence.Parameter;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -19,25 +19,34 @@ import java.util.Date;
 @Data
 @RequiredArgsConstructor
 @Indexed
+/*@AnalyzerDef(name = "customanalyzer",
+        tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
+        filters = {
+                @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                @TokenFilterDef(factory = solr.StempelPolishStemFilterFactor.class, params = {
+                        @Parameter(name = "language", value = "English")
+                })
+        })*/
+
 public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-    @Field(termVector = TermVector.YES)
+    @Field()
     private String name;
     private Date date;
-    @Field(termVector = TermVector.YES)
+    @Field()
     private String street;
     private int houseNumber;
     private int apartmentNumber;
-    @Field(termVector = TermVector.YES)
+    @Field()
     private String city;
     private String zip;
     private LocalDateTime creationDate;
     private Long userID;
     @Lob
     @Column
-    @Field(termVector = TermVector.YES)
+    @Field()
     private String description;
     private Long mainImage;
     @Field(bridge = @FieldBridge(impl = EnumBridge.class))
