@@ -19,27 +19,27 @@ import java.util.Date;
 @Data
 @RequiredArgsConstructor
 @Indexed
-/*@AnalyzerDef(name = "customanalyzer",
+@AnalyzerDef(name = "customanalyzer",
         tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
         filters = {
                 @TokenFilterDef(factory = LowerCaseFilterFactory.class),
-                @TokenFilterDef(factory = solr.StempelPolishStemFilterFactor.class, params = {
-                        @Parameter(name = "language", value = "English")
-                })
-        })*/
+        })
 
 public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     @Field()
+    @Analyzer(definition = "customanalyzer")
     private String name;
     private Date date;
     @Field()
+    @Analyzer(definition = "customanalyzer")
     private String street;
     private int houseNumber;
     private int apartmentNumber;
     @Field()
+    @Analyzer(definition = "customanalyzer")
     private String city;
     private String zip;
     private LocalDateTime creationDate;
@@ -47,6 +47,7 @@ public class Event {
     @Lob
     @Column
     @Field()
+    @Analyzer(definition = "customanalyzer")
     private String description;
     private Long mainImage;
     @Field(bridge = @FieldBridge(impl = EnumBridge.class))

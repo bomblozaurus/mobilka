@@ -45,18 +45,53 @@ public class EventSearcher {
         QueryBuilder queryBuilder = getQueryBuilder();
         MustJunction mustJunction = queryBuilder
                 .bool().must(queryBuilder.phrase()
-                        .withSlop(1).onField("name")
+                        .withSlop(3).onField("name")
                         .andField("street")
                         .andField("description")
                         .andField("city")
                         .sentence(text).createQuery());
 
-        keywordQuery = mustJunction.createQuery();
+        keywordQuery = mustJunction.must(checkScope(scope)).createQuery();
 
         List<Event> events = getJpaQuery(keywordQuery, page).getResultList();
 
         long total = getJpaQuery(keywordQuery, page).getResultSize();
         return new PageImpl<>(events, page, total);
+    }
+
+    Query checkScope(Scope scope) {
+        QueryBuilder queryBuilder = getQueryBuilder();
+
+        if (scope == Scope.OTHER) {
+            return queryBuilder
+                    .bool().must(queryBuilder.keyword()
+                            .onField("scope")
+                            .matching(Scope.OTHER)
+                            .createQuery()).createQuery();
+        }
+        if (scope == Scope.STUDENT) {
+            return queryBuilder
+                    .bool().must(queryBuilder.bool()
+                            .should(queryBuilder.keyword()
+                                    .onField("scope")
+                                    .matching(Scope.OTHER).createQuery())
+                            .should(queryBuilder.keyword()
+                                    .onField("scope")
+                                    .matching(Scope.STUDENT).createQuery())
+                            .createQuery()).createQuery();
+        }
+        return queryBuilder
+                .bool().must(queryBuilder.bool()
+                        .should(queryBuilder.keyword()
+                                .onField("scope")
+                                .matching(Scope.OTHER).createQuery())
+                        .should(queryBuilder.keyword()
+                                .onField("scope")
+                                .matching(Scope.STUDENT).createQuery())
+                        .should(queryBuilder.keyword()
+                                .onField("scope")
+                                .matching(Scope.DORMITORY).createQuery())
+                        .createQuery()).createQuery();
     }
 
     private FullTextQuery getJpaQuery(org.apache.lucene.search.Query luceneQuery, Pageable page) {
