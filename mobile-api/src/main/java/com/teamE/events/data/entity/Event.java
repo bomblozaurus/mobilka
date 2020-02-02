@@ -6,6 +6,7 @@ import com.teamE.users.StudentHouse;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilterFactory;
 import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.search.annotations.*;
 import org.hibernate.search.bridge.builtin.EnumBridge;
@@ -23,6 +24,7 @@ import java.util.Date;
         tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
         filters = {
                 @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                @TokenFilterDef(factory = ASCIIFoldingFilterFactory.class),
         })
 
 public class Event {
@@ -47,7 +49,7 @@ public class Event {
     @Lob
     @Column
     @Field()
-    @Analyzer(definition = "customanalyzer")
+   @Analyzer(definition = "customanalyzer")
     private String description;
     private Long mainImage;
     @Field(bridge = @FieldBridge(impl = EnumBridge.class))
