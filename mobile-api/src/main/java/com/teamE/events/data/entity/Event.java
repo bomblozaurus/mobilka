@@ -6,28 +6,32 @@ import com.teamE.users.StudentHouse;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+/*import org.apache.lucene.analysis.morfologik.MorfologikFilterFactory;*/
+import org.apache.lucene.analysis.morfologik.MorfologikFilterFactory;
 import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Parameter;
 import org.hibernate.search.bridge.builtin.EnumBridge;
 
 import javax.persistence.*;
-import javax.persistence.Parameter;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+
+/*@AnalyzerDef(name="polishanalyzer",
+        tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
+        filters = {
+        *//*       @TokenFilterDef(factory = MorfologikFilterFactory.class),*//*
+                @TokenFilterDef(factory = LowerCaseFilterFactory.class)
+         *//*      @TokenFilterDef(factory = StopFilterFactory.class, params = {
+                        @Parameter(name="words", value= "stopwords_pl.txt" ),
+                        @Parameter(name="ignoreCase", value="true")
+                })*//*
+        })*/
 @Entity
 @Data
 @RequiredArgsConstructor
 @Indexed
-/*@AnalyzerDef(name = "customanalyzer",
-        tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
-        filters = {
-                @TokenFilterDef(factory = LowerCaseFilterFactory.class),
-                @TokenFilterDef(factory = solr.StempelPolishStemFilterFactor.class, params = {
-                        @Parameter(name = "language", value = "English")
-                })
-        })*/
-
 public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
