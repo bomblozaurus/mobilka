@@ -43,13 +43,10 @@ public class EventSearcher {
 
         Query keywordQuery;
         QueryBuilder queryBuilder = getQueryBuilder();
-        MustJunction mustJunction = queryBuilder
-                .bool().must(queryBuilder.phrase()
-                        .withSlop(3).onField("name")
-                        .andField("street")
-                        .andField("description")
-                        .andField("city")
-                        .sentence(text).createQuery());
+        MustJunction mustJunction = queryBuilder.bool()
+                .must(checkQuery(text))
+                .must(checkScope(scope))
+                .must(checkStudenHouse(studentHouse));
 
         keywordQuery = mustJunction.must(checkScope(scope)).createQuery();
 
@@ -57,6 +54,15 @@ public class EventSearcher {
 
         long total = getJpaQuery(keywordQuery, page).getResultSize();
         return new PageImpl<>(events, page, total);
+    }
+
+    Query checkQuery(String query) {
+        return getQueryBuilder().phrase()
+                .withSlop(3).onField("name")
+                .andField("street")
+                .andField("description")
+                .andField("city")
+                .sentence(query).createQuery();
     }
 
     Query checkScope(Scope scope) {
@@ -92,6 +98,17 @@ public class EventSearcher {
                                 .onField("scope")
                                 .matching(Scope.DORMITORY).createQuery())
                         .createQuery()).createQuery();
+    }
+
+    Query checkStudenHouse(StudentHouse studentHouse) {
+        QueryBuilder queryBuilder = getQueryBuilder();
+        return queryBuilder.bool()
+                        .should(queryBuilder.keyword()
+                                .onField("studentHouse")
+                                .matching(studentHouse).createQuery())
+                        .should(queryBuilder.keyword()
+                                .onField("studentHouse")
+                                .matching(null).createQuery()).createQuery();
     }
 
     private FullTextQuery getJpaQuery(org.apache.lucene.search.Query luceneQuery, Pageable page) {
