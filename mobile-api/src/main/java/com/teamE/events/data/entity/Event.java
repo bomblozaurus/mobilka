@@ -55,5 +55,6 @@ public class Event {
     @Field(bridge = @FieldBridge(impl = EnumBridge.class))
     private Scope scope;
     @Field(bridge=@FieldBridge(impl= StudentHouseBridge.class))
+    @Enumerated(EnumType.STRING)
     private StudentHouse studentHouse;
 }

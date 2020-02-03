@@ -1,7 +1,6 @@
 package com.teamE.events;
 
 import com.teamE.commonAddsEvents.Scope;
-import com.teamE.events.data.entity.Event;
 import com.teamE.users.StudentHouse;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
@@ -33,7 +32,7 @@ public abstract class Searcher<T> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Page<Event> search(String text, StudentHouse studentHouse, Pageable pageable, Scope scope) {
+    public Page<T> search(String text, StudentHouse studentHouse, Pageable pageable, Scope scope) {
         MustJunction mustJunction = getQueryBuilder().bool()
                 .must(checkStudenHouse(studentHouse))
                 .must(checkScope(scope));
@@ -45,7 +44,7 @@ public abstract class Searcher<T> {
         return pageResult(mustJunction.createQuery(), pageable);
     }
 
-    public Page<Event> search(String text, StudentHouse studentHouse, Pageable pageable) {
+    public Page<T> search(String text, StudentHouse studentHouse, Pageable pageable) {
         MustJunction mustJunction = getQueryBuilder().bool()
                 .must(checkStudenHouse(studentHouse));
 
@@ -56,11 +55,11 @@ public abstract class Searcher<T> {
         return pageResult(mustJunction.createQuery(), pageable);
     }
 
-    private Page<Event> pageResult(Query query, Pageable pageable) {
-        List<Event> events = getJpaQuery(query, pageable).getResultList();
+    private Page<T> pageResult(Query query, Pageable pageable) {
+        List<T> elements = getJpaQuery(query, pageable).getResultList();
 
         long total = getJpaQuery(query, pageable).getResultSize();
-        return new PageImpl<>(events, pageable, total);
+        return new PageImpl<>(elements, pageable, total);
     }
 
     public abstract Query checkQuery(String text);
