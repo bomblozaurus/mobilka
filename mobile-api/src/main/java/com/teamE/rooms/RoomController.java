@@ -40,12 +40,6 @@ public class RoomController extends UsersDemandingController {
         this.roomSearch = roomSearch;
     }
 
-/*    @GetMapping("available")
-    public  Page<EntityModel<RoomWithConfigurationProjection>> getAllForUser(final Pageable pageable) {
-        Page<RoomWithConfigurationProjection> page = roomRepository.getAllByDsNumber(getUserStudentHouseId(), pageable);
-        return page.map(e -> roomWithConfigurationProjectionProcessor.process(e));
-    }*/
-
     @PostMapping()
     public Room save(@RequestBody @Validated RoomPOJO pojo) {
         Room room = roomPOJOToRoomTransformer.transform(pojo);
