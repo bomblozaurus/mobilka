@@ -42,6 +42,7 @@ public class AdsController extends UsersDemandingController {
     private AdSearch adSearch;
 
     public AdsController(ImageDestinationRepo imageDestinationRepo, AdValidator adValidator, AdPOJOToAdTransformer adPOJOToAdTransformer, AdsRepo adsRepo, AdProcessor adProcessor, AdSearch adSearch) {
+        super();
         this.imageDestinationRepo = imageDestinationRepo;
         this.adValidator = adValidator;
         this.adPOJOToAdTransformer = adPOJOToAdTransformer;

@@ -41,6 +41,7 @@ public class EventsController extends UsersDemandingController {
     private EventSearcher eventSearcher;
 
     public EventsController(EventsRepo eventsRepo, ImageDestinationRepo imageDestinationRepo, EventValidator eventValidator, EventResourceProcessor eventResourceProcessor, EventSearcher eventSearcher) {
+        super();
         this.eventsRepo = eventsRepo;
         this.imageDestinationRepo = imageDestinationRepo;
         this.eventValidator = eventValidator;
@@ -57,8 +58,6 @@ public class EventsController extends UsersDemandingController {
 
 
     public Page<EntityModel<Event>> findForUser(final Pageable pageable, final String query) {
-/*        Page<Event> page = eventsRepo.search(getUserScope(), getUserStudentHouse(), query, pageable);
-        return page.map(e -> eventResourceProcessor.process(e));*/
         Page<Event> page = eventSearcher.search(query, getUserStudentHouse(), pageable, getUserScope());
         return page.map(e -> eventResourceProcessor.process(e));
     }
