@@ -6,7 +6,7 @@ import org.apache.lucene.search.Query;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AdSearch extends Searcher<Ad> {
+public class AdSearch extends Searcher<Ad,Ad> {
 
     public AdSearch() {
         super(Ad.class);

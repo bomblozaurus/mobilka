@@ -22,7 +22,7 @@ import org.apache.lucene.search.Query;
 import java.util.List;
 
 
-public abstract class Searcher<T> {
+public abstract class Searcher<T,R> {
     private final Class<T> typeParameterClass;
 
     public Searcher(Class<T> typeParameterClass) {
@@ -32,7 +32,7 @@ public abstract class Searcher<T> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Page<T> search(String text, StudentHouse studentHouse, Pageable pageable, Scope scope) {
+    public Page<R> search(String text, StudentHouse studentHouse, Pageable pageable, Scope scope) {
         MustJunction mustJunction = getQueryBuilder().bool()
                 .must(checkStudenHouse(studentHouse))
                 .must(checkScope(scope));
@@ -44,9 +44,9 @@ public abstract class Searcher<T> {
         return pageResult(mustJunction.createQuery(), pageable);
     }
 
-    public Page<T> search(String text, StudentHouse studentHouse, Pageable pageable) {
+    public Page<R> search(String text, StudentHouse studentHouse, Pageable pageable) {
         MustJunction mustJunction = getQueryBuilder().bool()
-                .must(checkStudenHouse(studentHouse));
+                .must(checkDsNumber(studentHouse));
 
         if (text.trim().length() > 0) {
             mustJunction=mustJunction.must(checkQuery(text));
@@ -55,8 +55,8 @@ public abstract class Searcher<T> {
         return pageResult(mustJunction.createQuery(), pageable);
     }
 
-    private Page<T> pageResult(Query query, Pageable pageable) {
-        List<T> elements = getJpaQuery(query, pageable).getResultList();
+    private Page<R> pageResult(Query query, Pageable pageable) {
+        List<R> elements = getJpaQuery(query, pageable).getResultList();
 
         long total = getJpaQuery(query, pageable).getResultSize();
         return new PageImpl<>(elements, pageable, total);
@@ -102,15 +102,23 @@ public abstract class Searcher<T> {
     private Query checkStudenHouse(StudentHouse studentHouse) {
         QueryBuilder queryBuilder = getQueryBuilder();
         return queryBuilder.bool()
-                        .should(queryBuilder.keyword()
-                                .onField("studentHouse")
-                                .matching(studentHouse).createQuery())
-                        .should(queryBuilder.keyword()
-                                .onField("studentHouse")
-                                .matching(null).createQuery()).createQuery();
+                .should(queryBuilder.keyword()
+                        .onField("studentHouse")
+                        .matching(studentHouse).createQuery())
+                .should(queryBuilder.keyword()
+                        .onField("studentHouse")
+                        .matching(null).createQuery()).createQuery();
     }
 
-    private FullTextQuery getJpaQuery(org.apache.lucene.search.Query luceneQuery, Pageable page) {
+    private Query checkDsNumber(StudentHouse studentHouse) {
+        QueryBuilder queryBuilder = getQueryBuilder();
+        return queryBuilder.bool()
+                .should(queryBuilder.keyword()
+                        .onField("dsNumber")
+                        .matching(studentHouse.getId()).createQuery()).createQuery();
+    }
+
+    public FullTextQuery getJpaQuery(org.apache.lucene.search.Query luceneQuery, Pageable page) {
 
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 
@@ -121,7 +129,7 @@ public abstract class Searcher<T> {
         return fullTextQuery;
     }
 
-    public QueryBuilder getQueryBuilder() {
+    protected QueryBuilder getQueryBuilder() {
 
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 

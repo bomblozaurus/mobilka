@@ -1,5 +1,6 @@
 package com.teamE.rooms;
 
+import com.teamE.ads.data.entity.Ad;
 import com.teamE.common.UsersDemandingController;
 import com.teamE.common.ValidationHandler;
 import com.teamE.imageDestinations.Destination;
@@ -26,22 +27,23 @@ public class RoomController extends UsersDemandingController {
     private RoomPOJOToRoomTransformer roomPOJOToRoomTransformer;
     private RoomPOJOValidator roomPOJOValidator;
     private ImageDestinationRepo imageDestinationRepo;
+    private RoomSearch roomSearch;
 
-    @Autowired
-    public RoomController(RoomRepository roomRepository, RoomWithConfigurationProjectionProcessor roomWithConfigurationProjectionProcessor, RoomPOJOToRoomTransformer roomPOJOToRoomTransformer, RoomPOJOValidator roomPOJOValidator, ImageDestinationRepo imageDestinationRepo) {
+    public RoomController(RoomRepository roomRepository, RoomWithConfigurationProjectionProcessor roomWithConfigurationProjectionProcessor, RoomPOJOToRoomTransformer roomPOJOToRoomTransformer, RoomPOJOValidator roomPOJOValidator, ImageDestinationRepo imageDestinationRepo, RoomSearch roomSearch) {
         super();
         this.roomRepository = roomRepository;
         this.roomWithConfigurationProjectionProcessor = roomWithConfigurationProjectionProcessor;
         this.roomPOJOToRoomTransformer = roomPOJOToRoomTransformer;
         this.roomPOJOValidator = roomPOJOValidator;
         this.imageDestinationRepo = imageDestinationRepo;
+        this.roomSearch = roomSearch;
     }
 
-    @GetMapping("available")
+/*    @GetMapping("available")
     public  Page<EntityModel<RoomWithConfigurationProjection>> getAllForUser(final Pageable pageable) {
         Page<RoomWithConfigurationProjection> page = roomRepository.getAllByDsNumber(getUserStudentHouseId(), pageable);
         return page.map(e -> roomWithConfigurationProjectionProcessor.process(e));
-    }
+    }*/
 
     @PostMapping()
     public Room save(@RequestBody @Validated RoomPOJO pojo) {
@@ -65,8 +67,8 @@ public class RoomController extends UsersDemandingController {
 
     }
 
-    public Page<EntityModel<RoomWithConfigurationProjection>> findForUser(final Pageable pageable, final String query) {
-        Page<RoomWithConfigurationProjection> page = roomRepository.search(getUserStudentHouseId(), query, pageable);
+    public Page<EntityModel<RoomWithConfigurationDto>> findForUser(final Pageable pageable, final String query) {
+        Page<RoomWithConfigurationDto> page = roomSearch.search(query, getUserStudentHouse(), pageable);
         return page.map(e -> roomWithConfigurationProjectionProcessor.process(e));
     }
 

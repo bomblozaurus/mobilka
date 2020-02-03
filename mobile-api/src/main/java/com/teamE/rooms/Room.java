@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.annotations.*;
 
 import javax.persistence.*;
 
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Indexed
 @Entity
 @Table(name = "rooms")
 public class Room {
@@ -21,13 +22,19 @@ public class Room {
     private long id;
 
     @Column(nullable = false)
+    @Field()
+    @NumericField
     private int dsNumber;
 
     @Column(nullable = false)
+    @Field()
+    @Analyzer(definition = "customanalyzer")
     private String name;
 
     @Lob
     @Column
+    @Field()
+    @Analyzer(definition = "customanalyzer")
     private String description;
 
     @OneToOne

@@ -5,7 +5,7 @@ import org.apache.lucene.search.Query;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class EventSearcher extends Searcher<Event> {
+public class EventSearcher extends Searcher<Event,Event> {
 
     public EventSearcher() {
         super(Event.class);
