@@ -1,5 +1,6 @@
 package com.teamE.ads.controllers;
 
+import com.teamE.ads.AdSearch;
 import com.teamE.ads.data.AdsRepo;
 import com.teamE.ads.data.entity.*;
 import com.teamE.common.UsersDemandingController;
@@ -7,6 +8,7 @@ import com.teamE.common.ValidationHandler;
 import com.teamE.commonAddsEvents.Scope;
 import com.teamE.commonAddsEvents.converters.ScopeConverter;
 import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
+import com.teamE.events.data.entity.Event;
 import com.teamE.imageDestinations.Destination;
 import com.teamE.imageDestinations.ImageDestination;
 import com.teamE.imageDestinations.ImageDestinationRepo;
@@ -37,18 +39,21 @@ public class AdsController extends UsersDemandingController {
     private AdPOJOToAdTransformer adPOJOToAdTransformer;
     private AdsRepo adsRepo;
     private AdProcessor adProcessor;
+    private AdSearch adSearch;
 
     @Autowired
-    public AdsController(ImageDestinationRepo imageDestinationRepo, AdValidator adValidator, AdPOJOToAdTransformer adPOJOToAdTransformer, AdsRepo adsRepo, AdProcessor adProcessor) {
+    public AdsController(ImageDestinationRepo imageDestinationRepo, AdValidator adValidator, AdPOJOToAdTransformer adPOJOToAdTransformer, AdsRepo adsRepo, AdProcessor adProcessor, AdSearch adSearch) {
+        super();
         this.imageDestinationRepo = imageDestinationRepo;
         this.adValidator = adValidator;
         this.adPOJOToAdTransformer = adPOJOToAdTransformer;
         this.adsRepo = adsRepo;
         this.adProcessor = adProcessor;
+        this.adSearch = adSearch;
     }
 
     public Page<EntityModel<Ad>> findForUser(final Pageable pageable, final String query) {
-        Page<Ad> page = adsRepo.search(getUserScope(), getUserStudentHouse(), query, pageable);
+        Page<Ad> page = adSearch.search(query, getUserStudentHouse(), pageable, getUserScope());
         return page.map(e -> adProcessor.process(e));
     }
 

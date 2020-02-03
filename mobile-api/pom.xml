@@ -130,6 +130,11 @@
             <artifactId>hibernate-search-orm</artifactId>
             <version>5.10.8.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-lucene-core</artifactId>
+            <version>1.3.0</version>
+        </dependency>
 
     </dependencies>
 

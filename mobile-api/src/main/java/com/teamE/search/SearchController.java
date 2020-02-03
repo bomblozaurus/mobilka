@@ -4,7 +4,9 @@ import com.teamE.ads.controllers.AdsController;
 import com.teamE.ads.data.entity.Ad;
 import com.teamE.events.controllers.EventsController;
 import com.teamE.events.data.entity.Event;
+import com.teamE.rooms.Room;
 import com.teamE.rooms.RoomController;
+import com.teamE.rooms.RoomWithConfigurationDto;
 import com.teamE.rooms.RoomWithConfigurationProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +33,7 @@ public class SearchController {
     }
 
     @GetMapping("rooms")
-    public Page<EntityModel<RoomWithConfigurationProjection>> findAvailableRooms(final Pageable pageable, @RequestParam("query") final String query){
+    public Page<EntityModel<RoomWithConfigurationDto>> findAvailableRooms(final Pageable pageable, @RequestParam("query") final String query){
         return roomController.findForUser(pageable, query);
     }
 

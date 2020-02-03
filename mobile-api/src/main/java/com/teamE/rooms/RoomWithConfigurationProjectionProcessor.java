@@ -18,13 +18,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Configuration
-public class RoomWithConfigurationProjectionProcessor implements RepresentationModelProcessor<EntityModel<RoomWithConfigurationProjection>> {
+public class RoomWithConfigurationProjectionProcessor implements RepresentationModelProcessor<EntityModel<RoomWithConfigurationDto>> {
 
     @Autowired
     private RepositoryEntityLinks repositoryEntityLinks;
 
     @Override
-    public EntityModel<RoomWithConfigurationProjection> process(EntityModel<RoomWithConfigurationProjection> model) {
+    public EntityModel<RoomWithConfigurationDto> process(EntityModel<RoomWithConfigurationDto> model) {
 
         HttpServletRequest request =
                 ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes()))
@@ -41,11 +41,11 @@ public class RoomWithConfigurationProjectionProcessor implements RepresentationM
         return model;
     }
 
-    public EntityModel<RoomWithConfigurationProjection> process(RoomWithConfigurationProjection room) {
+    public EntityModel<RoomWithConfigurationDto> process(RoomWithConfigurationDto room) {
         return this.process(new EntityModel<>(room));
     }
 
-    public Collection<EntityModel<RoomWithConfigurationProjection>> process(Collection<RoomWithConfigurationProjection> rooms) {
+    public Collection<EntityModel<RoomWithConfigurationDto>> process(Collection<RoomWithConfigurationDto> rooms) {
         return rooms.stream().map(this::process).collect(Collectors.toList());
     }
 

@@ -6,6 +6,7 @@ import com.teamE.commonAddsEvents.Scope;
 import com.teamE.commonAddsEvents.converters.ScopeConverter;
 import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
 import com.teamE.events.EventSearcher;
+import com.teamE.events.Searcher;
 import com.teamE.events.data.EventResourceProcessor;
 import com.teamE.events.data.EventsRepo;
 import com.teamE.events.data.entity.Event;
@@ -57,8 +58,8 @@ public class EventsController extends UsersDemandingController {
     }
 
 
-    public Page<EntityModel<Event>> findForUser(final Pageable pageable, final String query){
-        Page<Event> page = eventsRepo.search(getUserScope(), getUserStudentHouse(), query, pageable);
+    public Page<EntityModel<Event>> findForUser(final Pageable pageable, final String query) {
+        Page<Event> page = eventSearcher.search(query, getUserStudentHouse(), pageable, getUserScope());
         return page.map(e -> eventResourceProcessor.process(e));
     }
 
