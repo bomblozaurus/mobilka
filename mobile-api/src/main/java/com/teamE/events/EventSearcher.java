@@ -33,11 +33,8 @@ public class EventSearcher {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Page<Event> searchEvent(Scope scope, StudentHouse studentHouse, String text, Pageable page) {
-
-        Query keywordQuery;
-        QueryBuilder queryBuilder = getQueryBuilder();
-        MustJunction mustJunction = queryBuilder.bool()
+    public Page<Event> search(String text, StudentHouse studentHouse, Pageable pageable, Scope scope) {
+        MustJunction mustJunction = getQueryBuilder().bool()
                 .must(checkStudenHouse(studentHouse))
                 .must(checkScope(scope));
 
@@ -45,24 +42,37 @@ public class EventSearcher {
             mustJunction=mustJunction.must(checkQuery(text));
         }
 
-        keywordQuery = mustJunction.createQuery();
-
-        List<Event> events = getJpaQuery(keywordQuery, page).getResultList();
-
-        long total = getJpaQuery(keywordQuery, page).getResultSize();
-        return new PageImpl<>(events, page, total);
+        return pageResult(mustJunction.createQuery(), pageable);
     }
 
-    Query checkQuery(String query) {
+    public Page<Event> search(String text, StudentHouse studentHouse, Pageable pageable) {
+        MustJunction mustJunction = getQueryBuilder().bool()
+                .must(checkStudenHouse(studentHouse));
+
+        if (text.trim().length() > 0) {
+            mustJunction=mustJunction.must(checkQuery(text));
+        }
+
+        return pageResult(mustJunction.createQuery(), pageable);
+    }
+
+    private Page<Event> pageResult(Query query, Pageable pageable) {
+        List<Event> events = getJpaQuery(query, pageable).getResultList();
+
+        long total = getJpaQuery(query, pageable).getResultSize();
+        return new PageImpl<>(events, pageable, total);
+    }
+
+    public Query checkQuery(String text) {
         return getQueryBuilder().phrase()
                 .withSlop(3).onField("name")
                 .andField("street")
                 .andField("description")
                 .andField("city")
-                .sentence(query).createQuery();
+                .sentence(text).createQuery();
     }
 
-    Query checkScope(Scope scope) {
+    private Query checkScope(Scope scope) {
         QueryBuilder queryBuilder = getQueryBuilder();
 
         if (scope == Scope.OTHER) {
@@ -97,7 +107,7 @@ public class EventSearcher {
                         .createQuery()).createQuery();
     }
 
-    Query checkStudenHouse(StudentHouse studentHouse) {
+    private Query checkStudenHouse(StudentHouse studentHouse) {
         QueryBuilder queryBuilder = getQueryBuilder();
         return queryBuilder.bool()
                         .should(queryBuilder.keyword()
