@@ -33,22 +33,19 @@ public class EventSearcher {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
-    public EventSearcher(EntityManager entityManager) {
-        super();
-        this.entityManager = entityManager;
-    }
-
     public Page<Event> searchEvent(Scope scope, StudentHouse studentHouse, String text, Pageable page) {
 
         Query keywordQuery;
         QueryBuilder queryBuilder = getQueryBuilder();
         MustJunction mustJunction = queryBuilder.bool()
-                .must(checkQuery(text))
-                .must(checkScope(scope))
-                .must(checkStudenHouse(studentHouse));
+                .must(checkStudenHouse(studentHouse))
+                .must(checkScope(scope));
 
-        keywordQuery = mustJunction.must(checkScope(scope)).createQuery();
+        if (text.trim().length() > 0) {
+            mustJunction=mustJunction.must(checkQuery(text));
+        }
+
+        keywordQuery = mustJunction.createQuery();
 
         List<Event> events = getJpaQuery(keywordQuery, page).getResultList();
 
