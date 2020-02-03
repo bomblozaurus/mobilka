@@ -29,6 +29,7 @@ public class RoomController extends UsersDemandingController {
     private ImageDestinationRepo imageDestinationRepo;
     private RoomSearch roomSearch;
 
+    @Autowired
     public RoomController(RoomRepository roomRepository, RoomWithConfigurationProjectionProcessor roomWithConfigurationProjectionProcessor, RoomPOJOToRoomTransformer roomPOJOToRoomTransformer, RoomPOJOValidator roomPOJOValidator, ImageDestinationRepo imageDestinationRepo, RoomSearch roomSearch) {
         super();
         this.roomRepository = roomRepository;

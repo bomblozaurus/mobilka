@@ -40,6 +40,7 @@ public class EventsController extends UsersDemandingController {
     private EventResourceProcessor eventResourceProcessor;
     private EventSearcher eventSearcher;
 
+    @Autowired
     public EventsController(EventsRepo eventsRepo, ImageDestinationRepo imageDestinationRepo, EventValidator eventValidator, EventResourceProcessor eventResourceProcessor, EventSearcher eventSearcher) {
         super();
         this.eventsRepo = eventsRepo;

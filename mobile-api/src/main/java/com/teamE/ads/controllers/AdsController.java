@@ -41,6 +41,7 @@ public class AdsController extends UsersDemandingController {
     private AdProcessor adProcessor;
     private AdSearch adSearch;
 
+    @Autowired
     public AdsController(ImageDestinationRepo imageDestinationRepo, AdValidator adValidator, AdPOJOToAdTransformer adPOJOToAdTransformer, AdsRepo adsRepo, AdProcessor adProcessor, AdSearch adSearch) {
         super();
         this.imageDestinationRepo = imageDestinationRepo;
