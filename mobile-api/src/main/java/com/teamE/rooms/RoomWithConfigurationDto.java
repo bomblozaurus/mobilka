@@ -15,6 +15,6 @@ public class RoomWithConfigurationDto {
     String description;
     LocalTime openFrom;
     LocalTime openTo;
-    Duration getRentInterval;
+    Duration rentInterval;
     BigDecimal pricePerInterval;
 }
