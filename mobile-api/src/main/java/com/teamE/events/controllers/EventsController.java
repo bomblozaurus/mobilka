@@ -6,6 +6,7 @@ import com.teamE.commonAddsEvents.Scope;
 import com.teamE.commonAddsEvents.converters.ScopeConverter;
 import com.teamE.commonAddsEvents.converters.StudentHouseConverter;
 import com.teamE.events.EventSearcher;
+import com.teamE.events.Searcher;
 import com.teamE.events.data.EventResourceProcessor;
 import com.teamE.events.data.EventsRepo;
 import com.teamE.events.data.entity.Event;
@@ -39,9 +40,7 @@ public class EventsController extends UsersDemandingController {
     private EventResourceProcessor eventResourceProcessor;
     private EventSearcher eventSearcher;
 
-    @Autowired
     public EventsController(EventsRepo eventsRepo, ImageDestinationRepo imageDestinationRepo, EventValidator eventValidator, EventResourceProcessor eventResourceProcessor, EventSearcher eventSearcher) {
-        super();
         this.eventsRepo = eventsRepo;
         this.imageDestinationRepo = imageDestinationRepo;
         this.eventValidator = eventValidator;
