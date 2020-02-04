@@ -6,13 +6,16 @@ import com.teamE.users.StudentHouse;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.hunspell.HunspellStemFilterFactory;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilterFactory;
+/*import org.apache.lucene.analysis.morfologik.MorfologikFilterFactory;*/
+import org.apache.lucene.analysis.morfologik.MorfologikFilterFactory;
 import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Parameter;
 import org.hibernate.search.bridge.builtin.EnumBridge;
 
 import javax.persistence.*;
-import javax.persistence.Parameter;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -23,8 +26,9 @@ import java.util.Date;
 @AnalyzerDef(name = "customanalyzer",
         tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
         filters = {
-                @TokenFilterDef(factory = LowerCaseFilterFactory.class),
                 @TokenFilterDef(factory = ASCIIFoldingFilterFactory.class),
+                @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                @TokenFilterDef(factory = MorfologikFilterFactory.class),
         })
 
 public class Event {
